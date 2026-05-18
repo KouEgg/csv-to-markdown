@@ -74,6 +74,17 @@ export default function MarkdownToCsv() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownload = () => {
+    if (!csvOutput) return;
+    const blob = new Blob([csvOutput], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "output.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleFile = (file) => {
     if (!file) return;
     const reader = new FileReader();
@@ -161,13 +172,40 @@ export default function MarkdownToCsv() {
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div style={{ padding: "10px 16px", borderBottom: "0.5px solid #f0f1f4", background: "#fafafa", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151" }}>CSV 出力</span>
-                <button onClick={handleCopy} disabled={!csvOutput} style={{ fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none", cursor: csvOutput ? "pointer" : "not-allowed", display: "flex", alignItems: "center", gap: "5px", fontWeight: 600, transition: "all 0.15s", background: copied ? "#dcfce7" : csvOutput ? "#4f6ef7" : "#f3f4f6", color: copied ? "#16a34a" : csvOutput ? "#fff" : "#9ca3af" }}>
-                  {copied ? (
-                    <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>コピーしました</>
-                  ) : (
-                    <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" strokeWidth="1.5"/></svg>コピー</>
-                  )}
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <button
+                    onClick={handleDownload}
+                    disabled={!csvOutput}
+                    style={{
+                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
+                      cursor: csvOutput ? "pointer" : "not-allowed",
+                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
+                      background: csvOutput ? "#f0fdf4" : "#f3f4f6",
+                      color: csvOutput ? "#16a34a" : "#9ca3af",
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    ダウンロード
+                  </button>
+                  <button
+                    onClick={handleCopy}
+                    disabled={!csvOutput}
+                    style={{
+                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
+                      cursor: csvOutput ? "pointer" : "not-allowed",
+                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
+                      transition: "all 0.15s",
+                      background: copied ? "#dcfce7" : csvOutput ? "#4f6ef7" : "#f3f4f6",
+                      color: copied ? "#16a34a" : csvOutput ? "#fff" : "#9ca3af",
+                    }}
+                  >
+                    {copied ? (
+                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>コピーしました</>
+                    ) : (
+                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" strokeWidth="1.5"/></svg>コピー</>
+                    )}
+                  </button>
+                </div>
               </div>
               <textarea
                 style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontFamily: "ui-monospace, monospace", fontSize: "13px", lineHeight: "1.7", color: "#1f2937", resize: "none", border: "none", outline: "none", background: "#fafafa", boxSizing: "border-box" }}
@@ -193,9 +231,9 @@ export default function MarkdownToCsv() {
           <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 16px" }}>使い方</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {[
-              "左のエリアにMarkdownテーブルを貼り付けるか、.mdファイルをドロップしてください",
+              "左のエリアにMarkdownテーブルを貼り付けるか、mdファイルをドロップまたは「ファイルを開く」で選択してください",
               "右側にCSVが即時表示されます",
-              "「コピー」ボタンでCSVをコピーできます",
+              "「コピー」ボタンでクリップボードにコピーするか、「ダウンロード」ボタンでCSVファイルとして保存できます",
             ].map((text, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                 <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#eef0fd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, color: "#4f6ef7", flexShrink: 0, marginTop: "1px" }}>{i + 1}</div>
