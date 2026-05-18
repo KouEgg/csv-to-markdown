@@ -103,7 +103,7 @@ export default function MarkdownToCsv() {
             MarkdownテーブルをCSV形式に即時変換。
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {["⚡ リアルタイム変換", "🇯🇵 日本語・全角文字対応", "🔒 データはブラウザ内のみで処理", "✅ 登録不要・完全無料"].map((label) => (
+            {["⚡ リアルタイム変換", "🇯🇵 日本語・全角文字対応", "🔒 機密データも安心（サーバー送信なし）", "✅ 登録不要・完全無料"].map((label) => (
               <span key={label} style={{ fontSize: "12px", padding: "5px 10px", borderRadius: "20px", background: "#eef0fd", color: "#4f6ef7", fontWeight: 500 }}>
                 {label}
               </span>
@@ -182,7 +182,7 @@ export default function MarkdownToCsv() {
             {stats ? (
               <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#22c55e" strokeWidth="2" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: "#6b7280" }}>{stats.rows}行 × {stats.cols}列 を変換しました</span></>
             ) : (
-              <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v4M8 11v.01" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: "#9ca3af" }}>データはブラウザ内のみで処理されます</span></>
+              <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v4M8 11v.01" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: "#9ca3af" }}>入力データはサーバーに送信されません。機密情報も安心してご利用いただけます。</span></>
             )}
           </div>
         </div>
@@ -211,7 +211,7 @@ export default function MarkdownToCsv() {
             {[
               { q: "どんなMarkdownテーブル形式に対応していますか？", a: "標準的なMarkdownテーブル形式（|で区切られた形式）に対応しています。整列指定（:---:等）のセパレーター行は自動的に除外されます。" },
               { q: "日本語を含むMarkdownテーブルは変換できますか？", a: "はい。全角文字・日本語を含むMarkdownテーブルも正確に変換できます。" },
-              { q: "入力したデータはサーバーに送信されますか？", a: "いいえ。すべての変換処理はブラウザ上で完結しています。入力データおよびアップロードしたファイルがサーバーに送信されることはありません。" },
+              { q: "機密情報を含むデータを変換しても大丈夫ですか？", a: "はい、安心してご利用いただけます。すべての変換処理はブラウザ上で完結しており、入力データおよびアップロードしたファイルが外部サーバーに送信されることは一切ありません。社内データや機密情報を含むMarkdownテーブルでも安全にご利用いただけます。" },
               { q: "どんな用途に使えますか？", a: "GitHubのREADMEやNotionからデータをCSVに戻したいとき、MarkdownテーブルをExcelやスプレッドシートで編集したいときなどに活用できます。" },
             ].map((item, i, arr) => (
               <div key={i} style={{ padding: "14px 18px", borderBottom: i < arr.length - 1 ? "0.5px solid #f0f1f4" : "none", background: "#fff" }}>

@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: "CSV → Markdownテーブル変換 | 無料オンラインツール",
     description:
-      "CSVやExcelデータをMarkdownテーブルに即時変換。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。",
+    "CSVやExcelデータをMarkdownテーブルに即時変換。入力データはサーバーに送信されないため機密情報も安心。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。GitHubのREADMEやNotionのドキュメント作成に。",
     type: "website",
   },
 };

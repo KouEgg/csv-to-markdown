@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: "Markdown → CSV変換 | 無料オンラインツール",
     description:
-      "MarkdownテーブルをCSV形式に即時変換。GitHubのREADMEやNotionからデータをCSVに戻したいときに。",
+    "MarkdownテーブルをCSV形式に即時変換。入力データはサーバーに送信されないため機密情報も安心。GitHubのREADMEやNotionからデータをCSVに戻したいときに。貼り付けるだけでリアルタイム変換。",
     type: "website",
   },
 };

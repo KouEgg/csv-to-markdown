@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: "CSV → HTMLテーブル変換 | 無料オンラインツール",
     description:
-      "CSVやExcelデータをHTMLテーブルに即時変換。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。",
+    "CSVやExcelデータをHTMLテーブルに即時変換。入力データはサーバーに送信されないため機密情報も安心。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。WordPressやはてなブログなどへの貼り付けに。",
     type: "website",
   },
 };
