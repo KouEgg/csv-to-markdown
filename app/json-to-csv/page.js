@@ -74,12 +74,13 @@ export default function JsonToCsvPage() {
             JSON → CSV 変換
           </h1>
           <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.6 }}>
-            JSONデータを貼り付けるだけでCSVに即時変換。
+            JSONデータを貼り付けるだけでCSVに即時変換。ネスト・階層構造のJSONも自動フラット化。
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", margin: "16px 0 0" }}>
             {[
               "⚡ リアルタイム変換",
               "📁 JSONファイル対応",
+              "🔀 ネスト・階層構造対応",
               "🇯🇵 日本語・全角文字対応",
               "💾 CSVダウンロード",
               "🔒 機密データも安心（サーバー送信なし）",
@@ -282,6 +283,10 @@ export default function JsonToCsvPage() {
               {
                 q: "機密情報を含むデータを変換しても大丈夫ですか？",
                 a: "はい、安心してご利用いただけます。すべての変換処理はブラウザ上で完結しており、入力データが外部サーバーに送信されることは一切ありません。"
+              },
+              {
+                q: "ネストしたJSONも変換できますか？",
+                a: "はい。{ \"address\": { \"city\": \"Tokyo\" } } のようなネスト構造は「address.city」のようにドット記法でフラット化してCSVの列に変換します。また { \"users\": [ ... ] } のようにオブジェクトの中に配列がある形式も自動検出して変換できます。"
               },
               {
                 q: "どんな用途に使えますか？",

@@ -36,7 +36,7 @@ const sections = [
       {
         href: "/json-to-csv",
         title: "JSON → CSV 変換",
-        description: "JSONデータをCSV形式に即時変換。APIレスポンスをExcelやGoogle Sheetsで開きたいときに便利。",
+        description: "JSONデータをCSV形式に即時変換。ネスト・階層構造も自動フラット化。APIレスポンスをExcelやGoogle Sheetsで開きたいときに便利。",
         badges: ["ダウンロード対応", "日本語対応"],
       },
     ],

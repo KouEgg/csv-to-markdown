@@ -19,7 +19,7 @@ const ALL_TOOLS = [
   {
     href: "/json-to-csv",
     title: "JSON → CSV 変換",
-    description: "JSONデータをCSV形式に即時変換。",
+    description: "JSONデータをCSV形式に即時変換。ネスト・階層構造も自動フラット化。",
   },
   {
     href: "/csv-to-excel",
