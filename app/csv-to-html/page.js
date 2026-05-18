@@ -4,18 +4,7 @@ import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import ToolLinks from "../components/toolLinks";
 import { downloadFile } from "../lib/download";
-
-function useWindowWidth() {
-  const [width, setWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024
-  );
-  useEffect(() => {
-    const handler = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, []);
-  return width;
-}
+import { useWindowWidth } from "../hooks/useWindowWidth";
 
 const TABLE_STYLES = {
   none: "",
