@@ -6,38 +6,7 @@ import { downloadFile } from "../lib/download";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 import Header from "../components/header";
 import Footer from "../components/footer";
-
-function markdownToCsv(mdText) {
-  if (!mdText || mdText.trim() === "") return "";
-
-  const lines = mdText.trim().split(/\r\n|\n|\r/);
-  const result = [];
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed.startsWith("|")) continue;
-
-    // セパレーター行を除外（:---:, ---, :--- 等を含む行）
-    if (/^\|[\s|:-]+\|$/.test(trimmed)) continue;
-
-    // 前後の|を除去してセルに分割
-    const cells = trimmed
-      .slice(1, -1)
-      .split("|")
-      .map((cell) => {
-        const v = cell.trim();
-        // カンマ・ダブルクォート・改行を含む場合はクォートで囲む
-        if (v.includes(",") || v.includes('"') || v.includes("\n")) {
-          return `"${v.replace(/"/g, '""')}"`;
-        }
-        return v;
-      });
-
-    result.push(cells.join(","));
-  }
-
-  return result.join("\n");
-}
+import { markdownToCsv } from "../lib/markdownToCsv";
 
 const SAMPLE_MD = `| name | age | city |
 | --- | --- | --- |
