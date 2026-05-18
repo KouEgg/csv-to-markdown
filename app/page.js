@@ -31,6 +31,12 @@ const tools = [
     description: "JSONデータをCSV形式に即時変換。APIレスポンスをExcelやGoogle Sheetsで開きたいときに便利。",
     badges: ["ダウンロード対応", "日本語対応"],
   },
+  {
+    href: "/csv-to-json",
+    title: "CSV → JSON 変換",
+    description: "CSVやExcelデータをJSON形式に即時変換。WebアプリやAPIへのデータ連携に便利。",
+    badges: ["Excel対応", "ダウンロード対応", "日本語対応"],
+  },
 ];
 
 export default function Home() {
