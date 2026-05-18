@@ -96,6 +96,17 @@ export default function CsvToHtml() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownload = () => {
+    if (!htmlOutput) return;
+    const blob = new Blob([htmlOutput], { type: "text/html;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "output.html";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleFile = (file) => {
     if (!file) return;
     const isExcel = file.name.endsWith(".xlsx") || file.name.endsWith(".xls");
@@ -215,13 +226,40 @@ export default function CsvToHtml() {
                     <button onClick={() => setShowPreview(true)} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: showPreview ? "#fff" : "transparent", color: showPreview ? "#374151" : "#9ca3af", transition: "all 0.15s" }}>プレビュー</button>
                   </div>
                 </div>
-                <button onClick={handleCopy} disabled={!htmlOutput} style={{ fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none", cursor: htmlOutput ? "pointer" : "not-allowed", display: "flex", alignItems: "center", gap: "5px", fontWeight: 600, transition: "all 0.15s", background: copied ? "#dcfce7" : htmlOutput ? "#4f6ef7" : "#f3f4f6", color: copied ? "#16a34a" : htmlOutput ? "#fff" : "#9ca3af" }}>
-                  {copied ? (
-                    <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>コピーしました</>
-                  ) : (
-                    <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" strokeWidth="1.5"/></svg>コピー</>
-                  )}
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <button
+                    onClick={handleDownload}
+                    disabled={!htmlOutput}
+                    style={{
+                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
+                      cursor: htmlOutput ? "pointer" : "not-allowed",
+                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
+                      background: htmlOutput ? "#f0fdf4" : "#f3f4f6",
+                      color: htmlOutput ? "#16a34a" : "#9ca3af",
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    ダウンロード
+                  </button>
+                  <button
+                    onClick={handleCopy}
+                    disabled={!htmlOutput}
+                    style={{
+                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
+                      cursor: htmlOutput ? "pointer" : "not-allowed",
+                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
+                      transition: "all 0.15s",
+                      background: copied ? "#dcfce7" : htmlOutput ? "#4f6ef7" : "#f3f4f6",
+                      color: copied ? "#16a34a" : htmlOutput ? "#fff" : "#9ca3af",
+                    }}
+                  >
+                    {copied ? (
+                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>コピーしました</>
+                    ) : (
+                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" strokeWidth="1.5"/></svg>コピー</>
+                    )}
+                  </button>
+                </div>
               </div>
               {showPreview ? (
                 <div
