@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -44,6 +45,11 @@ export default function JsonFormatterPage() {
     navigator.clipboard.writeText(output);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    if (!output) return;
+    downloadFile(output, null, "json", "application/json;charset=utf-8;");
   };
 
   const handleFile = (file) => {
@@ -196,6 +202,20 @@ export default function JsonFormatterPage() {
                   )}
                 </div>
                 <button
+                  onClick={handleDownload}
+                  disabled={!output}
+                  style={{
+                    fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
+                    cursor: output ? "pointer" : "not-allowed",
+                    display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
+                    background: output ? "#f0fdf4" : "#f3f4f6",
+                    color: output ? "#16a34a" : "#9ca3af",
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  {!isMobile && "ダウンロード"}
+                </button>
+                <button
                   onClick={handleCopy}
                   disabled={!output}
                   style={{
@@ -260,7 +280,7 @@ export default function JsonFormatterPage() {
               "「整形」モードでは見やすくインデントされたJSONが表示されます",
               "「圧縮」モードではスペース・改行を除去したコンパクトなJSONが出力されます",
               "JSONに誤りがある場合は右側にエラー内容が表示されます",
-              "「コピー」ボタンで結果をクリップボードにコピーできます",
+              "「コピー」ボタンで結果をクリップボードにコピーするか、「ダウンロード」ボタンで.jsonファイルとして保存できます",
             ].map((text, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                 <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#eef0fd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, color: "#4f6ef7", flexShrink: 0, marginTop: "1px" }}>

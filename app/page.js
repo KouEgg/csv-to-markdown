@@ -4,6 +4,7 @@ export const metadata = {
   title: "CSV Tools | 無料オンライン変換ツール集",
   description:
     "CSV・Excel・Markdown・JSONの変換ツールを無料で提供しています。登録不要・ブラウザ内で完結。",
+  keywords: "CSV変換, Excel CSV変換, CSV Markdown変換, JSON CSV変換, CSV JSON変換, JSON整形, CSV Excel変換, オンライン変換ツール, 無料",
 };
 
 const sections = [
