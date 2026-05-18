@@ -26,9 +26,10 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [stats, setStats] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [alignment, setAlignment] = useState("none");
   const isMobile = useWindowWidth() < 768;
 
-  const markdownOutput = csvToMarkdown(csvInput, { hasHeader, delimiter });
+  const markdownOutput = csvToMarkdown(csvInput, { hasHeader, delimiter, alignment });
 
   useEffect(() => {
     if (!csvInput.trim()) { setStats(null); return; }
@@ -105,6 +106,32 @@ export default function Home() {
                   <option value={"\t"}>タブ</option>
                   <option value=";">セミコロン（;）</option>
                 </select>
+              </div>
+            </div>
+
+            {/* 整列オプション */}
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 10px", borderRadius: "6px", border: "0.5px solid #e2e4e9", background: "#f9fafb" }}>
+              <span style={{ fontSize: "12px", color: "#6b7280" }}>整列</span>
+              <div style={{ display: "flex", background: "#f3f4f6", borderRadius: "4px", padding: "2px", gap: "1px" }}>
+                {[
+                  { value: "none", label: "なし" },
+                  { value: "left", label: "左" },
+                  { value: "center", label: "中央" },
+                  { value: "right", label: "右" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setAlignment(opt.value)}
+                    style={{
+                      fontSize: "11px", width: "36px", padding: "3px 0", borderRadius: "3px", border: "none",
+                      cursor: "pointer", fontWeight: 500, transition: "all 0.15s", textAlign: "center",
+                      background: alignment === opt.value ? "#fff" : "transparent",
+                      color: alignment === opt.value ? "#374151" : "#9ca3af",
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
             </div>
 

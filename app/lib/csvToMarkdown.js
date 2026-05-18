@@ -1,5 +1,5 @@
 export function csvToMarkdown(csvText, options = {}) {
-  const { hasHeader = true, delimiter = "," } = options;
+  const { hasHeader = true, delimiter = ",", alignment = "none" } = options;
 
   if (!csvText || csvText.trim() === "") {
     return "";
@@ -22,7 +22,12 @@ export function csvToMarkdown(csvText, options = {}) {
     : Array.from({ length: colCount }, (_, i) => `Column${i + 1}`);
 
   const body = hasHeader ? normalized.slice(1) : normalized;
-  const separator = header.map(() => "---");
+  const separator = header.map(() => {
+    if (alignment === "left") return ":---";
+    if (alignment === "center") return ":---:";
+    if (alignment === "right") return "---:";
+    return "---";
+  });
   const toRow = (cells) => `| ${cells.join(" | ")} |`;
 
   return [toRow(header), toRow(separator), ...body.map(toRow)].join("\n");
