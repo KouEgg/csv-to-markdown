@@ -28,10 +28,11 @@ export const metadata = {
     "github readme 表 作り方",
   ],
   openGraph: {
-    title: "CSV → Markdownテーブル変換 | 無料オンラインツール",
+    title: "CSV Tools | 無料オンライン変換ツール集",
     description:
-      "CSVをMarkdownテーブルに即時変換。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。",
+      "CSV・Excel・Markdownの変換ツールを無料で提供。登録不要・ブラウザ内で完結。機密情報も安心。",
     type: "website",
+    url: "https://www.kouegg.com",
   },
 };
 
