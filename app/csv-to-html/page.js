@@ -17,8 +17,28 @@ function useWindowWidth() {
   return width;
 }
 
+const TABLE_STYLES = {
+  none: "",
+  simple: `<style>
+table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 14px; }
+th, td { border: 1px solid #e2e4e9; padding: 8px 12px; text-align: left; }
+th { background: #f4f5f7; font-weight: bold; color: #1a1d23; }
+tr:hover { background: #f9fafb; }
+</style>
+`,
+  stripe: `<style>
+table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 14px; }
+th, td { border: 1px solid #d1d5db; padding: 8px 12px; text-align: left; }
+thead tr { background: #4f6ef7 !important; }
+th { background: #4f6ef7 !important; color: #fff !important; font-weight: bold; }
+tbody tr:nth-child(even) { background: #f4f5f7; }
+tbody tr:hover { background: #eef0fd; }
+</style>
+`,
+};
+
 function csvToHtml(csvText, options = {}) {
-  const { hasHeader = true, delimiter = "," } = options;
+  const { hasHeader = true, delimiter = ",", tableStyle = "none" } = options;
   if (!csvText || csvText.trim() === "") return "";
 
   const rows = csvText.trim().split(/\r\n|\n|\r/);
@@ -49,7 +69,8 @@ function csvToHtml(csvText, options = {}) {
     .map((row) => `    <tr>\n${row.map((c) => `      <td>${escape(c)}</td>`).join("\n")}\n    </tr>`)
     .join("\n")}\n  </tbody>`;
 
-  return `<table>\n${headerHtml}\n${bodyHtml}\n</table>`;
+  const styleTag = TABLE_STYLES[tableStyle] || "";
+  return `${styleTag}<table>\n${headerHtml}\n${bodyHtml}\n</table>`;
 }
 
 function parseCSVRow(row, delimiter = ",") {
@@ -80,9 +101,9 @@ export default function CsvToHtml() {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [tableStyle, setTableStyle] = useState("none");
   const [stats, setStats] = useState(null);
-
-  const htmlOutput = csvToHtml(csvInput, { hasHeader, delimiter });
+  const htmlOutput = csvToHtml(csvInput, { hasHeader, delimiter, tableStyle });
 
   useEffect(() => {
     if (!csvInput.trim()) { setStats(null); return; }
@@ -145,7 +166,7 @@ export default function CsvToHtml() {
             CSVやExcelデータをHTMLテーブルに即時変換。
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {["⚡ リアルタイム変換", "📊 Excel対応（.xlsx / .xls）", "👁 プレビュー表示", "🇯🇵 日本語・全角文字対応", "🔒 機密データも安心（サーバー送信なし）", "✅ 登録不要・完全無料"].map((label) => (
+            {["⚡ リアルタイム変換", "📊 Excel対応（.xlsx / .xls）", "👁 プレビュー表示", "🎨 スタイルオプション", "🇯🇵 日本語・全角文字対応", "🔒 機密データも安心（サーバー送信なし）", "✅ 登録不要・完全無料"].map((label) => (
               <span key={label} style={{ fontSize: "12px", padding: "5px 10px", borderRadius: "20px", background: "#eef0fd", color: "#4f6ef7", fontWeight: 500 }}>
                 {label}
               </span>
@@ -171,6 +192,30 @@ export default function CsvToHtml() {
                   <option value={"\t"}>タブ</option>
                   <option value=";">セミコロン（;）</option>
                 </select>
+              </div>
+            </div>
+            {/* スタイルオプション */}
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 10px", borderRadius: "6px", border: "0.5px solid #e2e4e9", background: "#f9fafb" }}>
+              <span style={{ fontSize: "12px", color: "#6b7280" }}>スタイル</span>
+              <div style={{ display: "flex", background: "#f3f4f6", borderRadius: "4px", padding: "2px", gap: "1px" }}>
+                {[
+                  { value: "none", label: "なし" },
+                  { value: "simple", label: "シンプル" },
+                  { value: "stripe", label: "ストライプ" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setTableStyle(opt.value)}
+                    style={{
+                      fontSize: "11px", padding: "3px 8px", borderRadius: "3px", border: "none",
+                      cursor: "pointer", fontWeight: 500, transition: "all 0.15s",
+                      background: tableStyle === opt.value ? "#fff" : "transparent",
+                      color: tableStyle === opt.value ? "#374151" : "#9ca3af",
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
             </div>
             {!csvInput && (
@@ -296,6 +341,7 @@ export default function CsvToHtml() {
               "「コピー」ボタンでHTMLをコピーするか、「ダウンロード」ボタンで.htmlファイルとして保存できます",
               "「プレビュー」タブで実際の表の見た目を確認できます",
               "1行目をヘッダーとして扱わない場合はトグルをオフにしてください",
+              "スタイルオプションで「シンプル」または「ストライプ」を選ぶと、CSSスタイル付きのHTMLが出力されます。WordPressやブログのHTML編集モードにそのまま貼り付けられます",
             ].map((text, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                 <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#eef0fd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, color: "#4f6ef7", flexShrink: 0, marginTop: "1px" }}>{i + 1}</div>
@@ -312,7 +358,9 @@ export default function CsvToHtml() {
               { q: "ExcelファイルをそのままHTMLに変換できますか？", a: "はい。.xlsxまたは.xlsファイルをドロップするか「ファイルを開く」で選択してください。1シート目の内容が自動的に読み込まれHTMLテーブルに変換されます。" },
               { q: "日本語を含むCSVは変換できますか？", a: "はい。全角文字・日本語を含むCSVも正確に変換できます。" },
               { q: "機密情報を含むデータを変換しても大丈夫ですか？", a: "はい、安心してご利用いただけます。すべての変換処理はブラウザ上で完結しており、入力データおよびアップロードしたファイルが外部サーバーに送信されることは一切ありません。社内データや機密情報を含むCSVでも安全にご利用いただけます。" },
-              { q: "どんな用途に使えますか？", a: "WordPressやはてなブログなどのHTML編集モード、WebサイトのHTMLファイルへの貼り付けなど、HTMLテーブルを使う場面全般で活用できます。" },
+              { q: "スタイルオプションの違いは何ですか？", a: "「なし」は素のHTMLテーブルを出力します。「シンプル」はボーダーとヘッダー背景色付きの読みやすいテーブルを出力します。「ストライプ」は青いヘッダーと縞模様のデザインで視認性の高いテーブルを出力します。いずれもCSSがHTMLに含まれているのでそのまま貼り付けて使えます。" },
+              { q: "スタイル付きHTMLをWordPressに貼り付けられますか？", a: "はい。WordPressの投稿編集画面で「カスタムHTML」ブロックを追加し、出力されたHTMLをそのまま貼り付けてください。スタイルも含まれているので見栄えの良いテーブルが表示されます。" },
+              { q: "どんな用途に使えますか？", a: "WordPressやはてなブログなどのHTML編集モード、WebサイトのHTMLファイルへの貼り付けなど、HTMLテーブルを使う場面全般で活用できます。スタイルオプションを使えばCSSの知識がなくても見栄えの良いテーブルをすぐに作れます。" },
             ].map((item, i, arr) => (
               <div key={i} style={{ padding: "14px 18px", borderBottom: i < arr.length - 1 ? "0.5px solid #f0f1f4" : "none", background: "#fff" }}>
                 <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1d23", margin: "0 0 5px" }}>{item.q}</p>
@@ -330,7 +378,7 @@ export default function CsvToHtml() {
         <section>
           <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 12px" }}>このツールについて</h2>
           <p style={{ fontSize: "13px", color: "#6b7280", lineHeight: 1.8, margin: 0 }}>
-            CSV→HTMLテーブル変換ツールは、CSVやExcelデータをHTMLテーブルに即時変換する無料のオンラインツールです。登録不要・完全無料でご利用いただけます。
+            CSV→HTMLテーブル変換ツールは、CSVやExcelデータをHTMLテーブルに即時変換する無料のオンラインツールです。シンプル・ストライプのスタイルオプションを選ぶことで、CSSの知識がなくても見栄えの良いHTMLテーブルをワンクリックで生成できます。WordPressやはてなブログのHTML編集モード、WebサイトへのHTMLテーブル埋め込みなど幅広い用途に活用できます。登録不要・完全無料でご利用いただけます。
           </p>
         </section>
 
