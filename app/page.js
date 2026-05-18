@@ -86,8 +86,30 @@ const handleFile = (file) => {
             CSV → Markdown テーブル変換
           </h1>
           <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.6 }}>
-            CSVを貼り付けるだけでMarkdownテーブルに即時変換。日本語・全角文字対応。
+            CSVを貼り付けるだけでMarkdownテーブルに即時変換。
           </p>
+          {/* 機能バッジ */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", margin: "16px 0 0" }}>
+            {[
+              "⚡ リアルタイム変換",
+              "📊 Excel対応（.xlsx / .xls）",
+              "👁 プレビュー表示",
+              "🇯🇵 日本語・全角文字対応",
+              "↔️ 整列オプション",
+              "🔒 データはブラウザ内のみで処理",
+              "✅ 登録不要・完全無料",
+            ].map((label) => (
+              <span
+                key={label}
+                style={{
+                  fontSize: "12px", padding: "5px 10px", borderRadius: "20px",
+                  background: "#eef0fd", color: "#4f6ef7", fontWeight: 500,
+                }}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* ツールカード */}
@@ -312,11 +334,14 @@ const handleFile = (file) => {
           <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 16px", letterSpacing: "-0.01em" }}>使い方</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {[
-              "左のエリアにCSVテキストを貼り付けるか、CSVファイルをドロップしてください",
+              "左のエリアにCSVテキストを貼り付けるか、CSVファイルをドロップまたは「ファイルを開く」で選択してください",
+              "ExcelファイルはそのままドロップまたはExcelファイルを開くで選択できます（.xlsx / .xls対応）",
               "右側にMarkdownテーブルが即時表示されます",
-              "「コピー」ボタンでクリップボードにコピーできます",
+              "「テキスト」タブで変換結果を確認し「コピー」ボタンでコピーできます",
+              "「プレビュー」タブで実際の表の見た目を確認できます",
               "1行目をヘッダーとして扱わない場合はトグルをオフにしてください",
-              "Excelからコピーした場合は区切り文字を「タブ」に切り替えてください",
+              "Excelからセルをコピーして貼り付ける場合は区切り文字を「タブ」に切り替えてください",
+              "列の整列（なし・左・中央・右）を切り替えるとMarkdownの整列指定が変わります",
             ].map((text, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                 <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#eef0fd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, color: "#4f6ef7", flexShrink: 0, marginTop: "1px" }}>
@@ -333,10 +358,30 @@ const handleFile = (file) => {
           <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 16px", letterSpacing: "-0.01em" }}>よくある質問</h2>
           <div style={{ border: "0.5px solid #e2e4e9", borderRadius: "10px", overflow: "hidden" }}>
             {[
-              { q: "Excelの表をMarkdownに変換できますか？", a: "はい。Excelでセルを選択してコピーし、左のエリアに貼り付けてください。区切り文字を「タブ」に切り替えると正しく変換されます。" },
-              { q: "日本語を含むCSVは変換できますか？", a: "はい。全角文字・日本語を含むCSVも正確に変換できます。" },
-              { q: "入力したデータはサーバーに送信されますか？", a: "いいえ。すべての変換処理はブラウザ上で完結しています。入力データがサーバーに送信されることはありません。" },
-              { q: "どんな用途に使えますか？", a: "GitHubのREADME、Notionのドキュメント、Obsidianのノート、技術仕様書など、Markdownを使う場面全般で活用できます。" },
+              {
+                q: "ExcelファイルをそのままMarkdownに変換できますか？",
+                a: "はい。.xlsxまたは.xlsファイルをドロップするか「ファイルを開く」で選択してください。1シート目の内容が自動的に読み込まれMarkdownテーブルに変換されます。"
+              },
+              {
+                q: "Excelのセルをコピーして貼り付けることはできますか？",
+                a: "はい。Excelでセルを選択してコピーし、左のエリアに貼り付けてください。区切り文字を「タブ」に切り替えると正しく変換されます。"
+              },
+              {
+                q: "日本語を含むCSVは変換できますか？",
+                a: "はい。全角文字・日本語を含むCSVも正確に変換できます。"
+              },
+              {
+                q: "列の整列はどう使えばいいですか？",
+                a: "「なし」はMarkdownの標準形式（---）、「左」は左寄せ（:---）、「中央」は中央寄せ（:---:）、「右」は右寄せ（---:）を出力します。GitHubやNotionなど整列指定に対応したレンダラーで有効です。"
+              },
+              {
+                q: "入力したデータはサーバーに送信されますか？",
+                a: "いいえ。すべての変換処理はブラウザ上で完結しています。入力データおよびアップロードしたファイルがサーバーに送信されることはありません。"
+              },
+              {
+                q: "どんな用途に使えますか？",
+                a: "GitHubのREADME、Notionのドキュメント、Obsidianのノート、技術仕様書など、Markdownを使う場面全般で活用できます。"
+              },
             ].map((item, i, arr) => (
               <div key={i} style={{ padding: "14px 18px", borderBottom: i < arr.length - 1 ? "0.5px solid #f0f1f4" : "none", background: "#fff" }}>
                 <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1d23", margin: "0 0 5px" }}>{item.q}</p>
@@ -350,9 +395,7 @@ const handleFile = (file) => {
         <section>
           <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 12px", letterSpacing: "-0.01em" }}>このツールについて</h2>
           <p style={{ fontSize: "13px", color: "#6b7280", lineHeight: 1.8, margin: 0 }}>
-            CSV→Markdownテーブル変換ツールは、CSVデータをMarkdown形式のテーブルに即時変換する無料のオンラインツールです。
-            貼り付けるだけでリアルタイムに変換され、ワンクリックでコピーできます。
-            ヘッダー行の有無や区切り文字（カンマ・タブ・セミコロン）の切り替えにも対応しています。
+            CSV→Markdownテーブル変換ツールは、CSVやExcelデータをMarkdown形式のテーブルに即時変換する無料のオンラインツールです。
             登録不要・完全無料でご利用いただけます。
           </p>
         </section>
