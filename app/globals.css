@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.markdown-preview table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  font-size: 13px !important;
+  line-height: 1.7 !important;
+}
+
+.markdown-preview th {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  padding: 7px 12px !important;
+  border: 1px solid #e2e4e9 !important;
+}
+
+.markdown-preview td {
+  padding: 7px 12px !important;
+  border: 1px solid #e2e4e9 !important;
+  color: #374151 !important;
+}
+
+.markdown-preview tr:nth-child(even) td {
+  background: #fafafa !important;
+}

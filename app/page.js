@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { csvToMarkdown } from "./lib/csvToMarkdown";
+import { marked } from "marked";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -24,6 +25,7 @@ export default function Home() {
   const [delimiter, setDelimiter] = useState(",");
   const [isDragging, setIsDragging] = useState(false);
   const [stats, setStats] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
   const isMobile = useWindowWidth() < 768;
 
   const markdownOutput = csvToMarkdown(csvInput, { hasHeader, delimiter });
@@ -170,9 +172,25 @@ export default function Home() {
             {/* 右：出力 */}
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div style={{ padding: "10px 16px", borderBottom: "0.5px solid #f0f1f4", background: "#fafafa", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151", letterSpacing: "0.01em" }}>
-                  Markdown 出力
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151", letterSpacing: "0.01em" }}>
+                    Markdown 出力
+                  </span>
+                  <div style={{ display: "flex", background: "#f3f4f6", borderRadius: "6px", padding: "2px" }}>
+                    <button
+                      onClick={() => setShowPreview(false)}
+                      style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: !showPreview ? "#fff" : "transparent", color: !showPreview ? "#374151" : "#9ca3af", transition: "all 0.15s" }}
+                    >
+                      テキスト
+                    </button>
+                    <button
+                      onClick={() => setShowPreview(true)}
+                      style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: showPreview ? "#fff" : "transparent", color: showPreview ? "#374151" : "#9ca3af", transition: "all 0.15s" }}
+                    >
+                      プレビュー
+                    </button>
+                  </div>
+                </div>
                 <button
                   onClick={handleCopy}
                   disabled={!markdownOutput}
@@ -198,17 +216,33 @@ export default function Home() {
                   )}
                 </button>
               </div>
-              <textarea
-                style={{
-                  width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px",
-                  fontFamily: "ui-monospace, monospace", fontSize: "13px", lineHeight: "1.7",
-                  color: "#1f2937", resize: "none", border: "none", outline: "none",
-                  background: "#fafafa", boxSizing: "border-box"
-                }}
-                readOnly
-                value={markdownOutput}
-                placeholder="変換結果がここに表示されます"
-              />
+              {showPreview ? (
+                <div
+                  className="markdown-preview"
+                  style={{
+                    width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px",
+                    fontSize: "13px", lineHeight: "1.7", color: "#1f2937",
+                    background: "#fafafa", boxSizing: "border-box", overflowY: "auto"
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: markdownOutput
+                      ? marked(markdownOutput)
+                      : "<p style='color:#9ca3af'>変換結果がここに表示されます</p>"
+                  }}
+                />
+              ) : (
+                <textarea
+                  style={{
+                    width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px",
+                    fontFamily: "ui-monospace, monospace", fontSize: "13px", lineHeight: "1.7",
+                    color: "#1f2937", resize: "none", border: "none", outline: "none",
+                    background: "#fafafa", boxSizing: "border-box"
+                  }}
+                  readOnly
+                  value={markdownOutput}
+                  placeholder="変換結果がここに表示されます"
+                />
+              )}
             </div>
           </div>
 
