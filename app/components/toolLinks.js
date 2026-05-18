@@ -32,36 +32,31 @@ const ALL_TOOLS = [
     description: "ExcelファイルをCSV形式に即時変換。文字化けしないUTF-8に対応。",
   },
   {
-    href: "/json-formatter",
-    title: "JSON整形・バリデーター",
-    description: "JSONを貼り付けるだけで即時整形・バリデーション。圧縮モード対応。",
-  },
-  {
     href: "/csv-to-html",
     title: "CSV → HTML テーブル変換",
     description: "CSVやExcelデータをHTMLテーブルに即時変換。",
+  },
+  {
+    href: "/json-formatter",
+    title: "JSON整形・バリデーター",
+    description: "JSONを貼り付けるだけで即時整形・バリデーション。圧縮モード対応。",
   },
 ];
 
 const CARD_STYLE = {
   background: "#fff",
-  border: "0.5px solid #e2e4e9",
+  border: "1.5px solid #c7d0f8",
   borderRadius: "12px",
   padding: "20px",
   cursor: "pointer",
-  height: "100%",
   boxSizing: "border-box",
+  width: "100%",
 };
 
 export default function ToolLinks({ current, reverse, reverseLabel }) {
   const otherTools = ALL_TOOLS.filter(
     (tool) => tool.href !== current && tool.href !== reverse
   );
-
-  const allDisplayTools = [
-    ...(reverse ? [ALL_TOOLS.find((t) => t.href === reverse)] : []),
-    ...otherTools,
-  ];
 
   return (
     <div>
@@ -71,14 +66,16 @@ export default function ToolLinks({ current, reverse, reverseLabel }) {
           <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1d23", margin: "0 0 10px" }}>
             逆変換ツール
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "12px" }}>
-            <Link href={reverse} style={{ textDecoration: "none" }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+            gap: "12px",
+          }}>
+            <Link href={reverse} style={{ textDecoration: "none", display: "flex" }}>
               <div style={CARD_STYLE}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-                  <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: 0 }}>
-                    {reverseLabel}
-                  </h3>
-                </div>
+                <p style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 6px" }}>
+                  {reverseLabel}
+                </p>
                 <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.6 }}>
                   {ALL_TOOLS.find((t) => t.href === reverse)?.description}
                 </p>
@@ -101,11 +98,9 @@ export default function ToolLinks({ current, reverse, reverseLabel }) {
         {otherTools.map((tool) => (
           <Link key={tool.href} href={tool.href} style={{ textDecoration: "none", display: "flex" }}>
             <div style={CARD_STYLE}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: 0 }}>
-                  {tool.title}
-                </h3>
-              </div>
+              <p style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 6px" }}>
+                {tool.title}
+              </p>
               <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.6 }}>
                 {tool.description}
               </p>
