@@ -125,11 +125,22 @@ export default function Home() {
                 <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151", letterSpacing: "0.01em" }}>
                   CSV 入力
                 </span>
-                <label style={{ fontSize: "12px", color: "#6b7280", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  ファイルを開く
-                  <input type="file" accept=".csv,.tsv,.txt" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
-                </label>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  {csvInput && (
+                    <button
+                      onClick={() => setCsvInput("")}
+                      style={{ fontSize: "12px", color: "#9ca3af", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "3px", padding: 0 }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      クリア
+                    </button>
+                  )}
+                  <label style={{ fontSize: "12px", color: "#6b7280", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    ファイルを開く
+                    <input type="file" accept=".csv,.tsv,.txt" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
+                  </label>
+                </div>
               </div>
               <div
                 style={{ position: "relative", flex: 1 }}
