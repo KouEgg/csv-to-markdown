@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import ToolLinks from "../components/toolLinks";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -258,6 +259,15 @@ export default function MarkdownToCsv() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ツールリンク */}
+        <section style={{ marginBottom: "36px" }}>
+          <ToolLinks
+            current="/markdown-to-csv"
+            reverse="/csv-to-markdown"
+            reverseLabel="CSV → Markdown 変換"
+          />
         </section>
 
         <section>

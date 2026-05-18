@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { csvToMarkdown } from "../lib/csvToMarkdown";
 import { marked } from "marked";
 import * as XLSX from "xlsx";
+import ToolLinks from "../components/toolLinks";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -389,6 +390,15 @@ const handleFile = (file) => {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ツールリンク */}
+        <section style={{ marginBottom: "36px" }}>
+          <ToolLinks
+            current="/csv-to-markdown"
+            reverse="/markdown-to-csv"
+            reverseLabel="Markdown → CSV 変換"
+          />
         </section>
 
         {/* このツールについて */}

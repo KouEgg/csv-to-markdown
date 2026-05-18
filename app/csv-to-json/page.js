@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { csvToJson } from "../lib/csvToJson";
 import * as XLSX from "xlsx";
+import ToolLinks from "../components/toolLinks";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -331,6 +332,15 @@ export default function CsvToJsonPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ツールリンク */}
+        <section style={{ marginBottom: "36px" }}>
+          <ToolLinks
+            current="/csv-to-json"
+            reverse="/json-to-csv"
+            reverseLabel="JSON → CSV 変換"
+          />
         </section>
 
         {/* このツールについて */}

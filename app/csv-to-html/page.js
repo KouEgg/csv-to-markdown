@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
+import ToolLinks from "../components/toolLinks";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -284,6 +285,11 @@ export default function CsvToHtml() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ツールリンク */}
+        <section style={{ marginBottom: "36px" }}>
+          <ToolLinks current="/csv-to-html" />
         </section>
 
         <section>
