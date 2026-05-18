@@ -6,6 +6,8 @@ import * as XLSX from "xlsx";
 import ToolLinks from "../components/toolLinks";
 import { downloadFile } from "../lib/download";
 import { useWindowWidth } from "../hooks/useWindowWidth";
+import Header from "../components/header";
+import Footer from "../components/footer";
 
 const SAMPLE_CSV = `name,age,city\nAlice,30,Tokyo\nBob,25,Osaka\n山田 太郎,28,名古屋`;
 
@@ -44,12 +46,7 @@ export default function CsvToJsonPage() {
     <div style={{ minHeight: "100vh", background: "#f4f5f7", fontFamily: "system-ui, sans-serif" }}>
 
       {/* ナビゲーションバー */}
-      <header style={{ background: "#fff", borderBottom: "1px solid #e2e4e9", padding: "0 32px", height: "52px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <a href="/" style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", letterSpacing: "-0.02em", textDecoration: "none" }}>
-          CSV Tools
-        </a>
-        <span style={{ fontSize: "12px", color: "#9ca3af" }}>無料・登録不要</span>
-      </header>
+      <Header />
 
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "36px 24px 80px" }}>
 
@@ -328,14 +325,7 @@ export default function CsvToJsonPage() {
       </main>
 
       {/* フッター */}
-      <footer style={{ borderTop: "0.5px solid #e2e4e9", padding: "18px 32px", textAlign: "center", display: "flex", flexDirection: "column", gap: "8px", alignItems: "center" }}>
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-          <a href="/privacy" style={{ fontSize: "12px", color: "#6b7280", textDecoration: "none" }}>
-            プライバシーポリシー
-          </a>
-        </div>
-        <span style={{ fontSize: "12px", color: "#9ca3af" }}>CSV Tools — 無料オンラインツール集</span>
-      </footer>
+      <Footer />
 
     </div>
   );

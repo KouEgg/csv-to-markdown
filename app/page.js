@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 export const metadata = {
   title: "CSV Tools | 無料オンライン変換ツール集",
@@ -82,12 +84,7 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", background: "#f4f5f7", fontFamily: "system-ui, sans-serif" }}>
 
-      <header style={{ background: "#fff", borderBottom: "1px solid #e2e4e9", padding: "0 32px", height: "52px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", letterSpacing: "-0.02em" }}>
-          CSV Tools
-        </span>
-        <span style={{ fontSize: "12px", color: "#9ca3af" }}>無料・登録不要</span>
-      </header>
+      <Header />
 
       <main style={{ maxWidth: "900px", margin: "0 auto", padding: "48px 24px 80px" }}>
 
@@ -137,14 +134,7 @@ export default function Home() {
 
       </main>
 
-      <footer style={{ borderTop: "0.5px solid #e2e4e9", padding: "18px 32px", textAlign: "center", display: "flex", flexDirection: "column", gap: "8px", alignItems: "center" }}>
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-          <a href="/privacy" style={{ fontSize: "12px", color: "#6b7280", textDecoration: "none" }}>
-            プライバシーポリシー
-          </a>
-        </div>
-        <span style={{ fontSize: "12px", color: "#9ca3af" }}>CSV Tools — 無料オンラインツール集</span>
-      </footer>
+      <Footer />
 
     </div>
   );
