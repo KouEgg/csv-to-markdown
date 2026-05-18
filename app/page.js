@@ -42,6 +42,23 @@ const sections = [
     ],
   },
   {
+    label: "CSV ↔ Excel",
+    tools: [
+      {
+        href: "/csv-to-excel",
+        title: "CSV → Excel 変換",
+        description: "CSVデータをExcelファイル（.xlsx）に即時変換。文字化けの心配なく開ける。",
+        badges: ["ダウンロード対応", "日本語対応"],
+      },
+      {
+        href: "/excel-to-csv",
+        title: "Excel → CSV 変換",
+        description: "ExcelファイルをCSV形式に即時変換。UTF-8・BOM付きで文字化けしないCSVを出力。",
+        badges: ["UTF-8対応", "ダウンロード対応"],
+      },
+    ],
+  },
+  {
     label: "その他",
     tools: [
       {

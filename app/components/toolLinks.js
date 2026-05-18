@@ -22,6 +22,16 @@ const ALL_TOOLS = [
     description: "JSONデータをCSV形式に即時変換。",
   },
   {
+    href: "/csv-to-excel",
+    title: "CSV → Excel 変換",
+    description: "CSVデータをExcelファイル（.xlsx）に即時変換。",
+  },
+  {
+    href: "/excel-to-csv",
+    title: "Excel → CSV 変換",
+    description: "ExcelファイルをCSV形式に即時変換。文字化けしないUTF-8に対応。",
+  },
+  {
     href: "/csv-to-html",
     title: "CSV → HTML テーブル変換",
     description: "CSVやExcelデータをHTMLテーブルに即時変換。",
