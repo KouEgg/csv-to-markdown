@@ -26,3 +26,7 @@
 .markdown-preview tr:nth-child(even) td {
   background: #fafafa !important;
 }
+
+.tool-card:hover {
+  border-color: #4f6ef7 !important;
+}
