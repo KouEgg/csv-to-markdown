@@ -11,6 +11,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata = {
   title: "CSV → Markdownテーブル変換 | 無料オンラインツール",
   description:
@@ -36,6 +41,13 @@ export default function RootLayout({ children }) {
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3139567627259082"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
