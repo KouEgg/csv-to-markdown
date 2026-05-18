@@ -1,0 +1,22 @@
+{
+    "sourceFile": "app/lib/csvToMarkdown.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1778570684834,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1778570905279,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,43 +1,35 @@\n-export function csvToMarkdown(csvText) {\r\n-  // 空文字チェック\r\n+export function csvToMarkdown(csvText, options = {}) {\r\n+  const { hasHeader = true, delimiter = \",\" } = options;\r\n+\r\n   if (!csvText || csvText.trim() === \"\") {\r\n     return \"\";\r\n   }\r\n \r\n-  // 行に分割（改行コードの違いを吸収）\r\n   const rows = csvText.trim().split(/\\r\\n|\\n|\\r/);\r\n-\r\n   if (rows.length === 0) return \"\";\r\n \r\n-  // 各行をカンマで分割してセルの配列に変換\r\n-  const table = rows.map((row) => parseCSVRow(row));\r\n+  const table = rows.map((row) => parseCSVRow(row, delimiter));\r\n \r\n-  // 列数を統一（最大列数に合わせる）\r\n   const colCount = Math.max(...table.map((row) => row.length));\r\n   const normalized = table.map((row) => {\r\n     while (row.length < colCount) row.push(\"\");\r\n     return row;\r\n   });\r\n \r\n-  // Markdown生成\r\n-  const header = normalized[0];\r\n+  // ヘッダーなしの場合はColumn1, Column2...を自動生成\r\n+  const header = hasHeader\r\n+    ? normalized[0]\r\n+    : Array.from({ length: colCount }, (_, i) => `Column${i + 1}`);\r\n+\r\n+  const body = hasHeader ? normalized.slice(1) : normalized;\r\n   const separator = header.map(() => \"---\");\r\n-  const body = normalized.slice(1);\r\n-\r\n   const toRow = (cells) => `| ${cells.join(\" | \")} |`;\r\n \r\n-  const lines = [\r\n-    toRow(header),\r\n-    toRow(separator),\r\n-    ...body.map(toRow),\r\n-  ];\r\n-\r\n-  return lines.join(\"\\n\");\r\n+  return [toRow(header), toRow(separator), ...body.map(toRow)].join(\"\\n\");\r\n }\r\n \r\n-// カンマ区切りの1行をパース（ダブルクォート対応）\r\n-function parseCSVRow(row) {\r\n+function parseCSVRow(row, delimiter = \",\") {\r\n   const cells = [];\r\n   let current = \"\";\r\n   let inQuotes = false;\r\n \r\n@@ -45,15 +37,14 @@\n     const char = row[i];\r\n \r\n     if (char === '\"') {\r\n       if (inQuotes && row[i + 1] === '\"') {\r\n-        // ダブルクォートのエスケープ（\"\" → \"）\r\n         current += '\"';\r\n         i++;\r\n       } else {\r\n         inQuotes = !inQuotes;\r\n       }\r\n-    } else if (char === \",\" && !inQuotes) {\r\n+    } else if (char === delimiter && !inQuotes) {\r\n       cells.push(current.trim());\r\n       current = \"\";\r\n     } else {\r\n       current += char;\r\n"
+                }
+            ],
+            "date": 1778570684834,
+            "name": "Commit-0",
+            "content": "export function csvToMarkdown(csvText) {\r\n  // 空文字チェック\r\n  if (!csvText || csvText.trim() === \"\") {\r\n    return \"\";\r\n  }\r\n\r\n  // 行に分割（改行コードの違いを吸収）\r\n  const rows = csvText.trim().split(/\\r\\n|\\n|\\r/);\r\n\r\n  if (rows.length === 0) return \"\";\r\n\r\n  // 各行をカンマで分割してセルの配列に変換\r\n  const table = rows.map((row) => parseCSVRow(row));\r\n\r\n  // 列数を統一（最大列数に合わせる）\r\n  const colCount = Math.max(...table.map((row) => row.length));\r\n  const normalized = table.map((row) => {\r\n    while (row.length < colCount) row.push(\"\");\r\n    return row;\r\n  });\r\n\r\n  // Markdown生成\r\n  const header = normalized[0];\r\n  const separator = header.map(() => \"---\");\r\n  const body = normalized.slice(1);\r\n\r\n  const toRow = (cells) => `| ${cells.join(\" | \")} |`;\r\n\r\n  const lines = [\r\n    toRow(header),\r\n    toRow(separator),\r\n    ...body.map(toRow),\r\n  ];\r\n\r\n  return lines.join(\"\\n\");\r\n}\r\n\r\n// カンマ区切りの1行をパース（ダブルクォート対応）\r\nfunction parseCSVRow(row) {\r\n  const cells = [];\r\n  let current = \"\";\r\n  let inQuotes = false;\r\n\r\n  for (let i = 0; i < row.length; i++) {\r\n    const char = row[i];\r\n\r\n    if (char === '\"') {\r\n      if (inQuotes && row[i + 1] === '\"') {\r\n        // ダブルクォートのエスケープ（\"\" → \"）\r\n        current += '\"';\r\n        i++;\r\n      } else {\r\n        inQuotes = !inQuotes;\r\n      }\r\n    } else if (char === \",\" && !inQuotes) {\r\n      cells.push(current.trim());\r\n      current = \"\";\r\n    } else {\r\n      current += char;\r\n    }\r\n  }\r\n\r\n  cells.push(current.trim());\r\n  return cells;\r\n}"
+        }
+    ]
+}

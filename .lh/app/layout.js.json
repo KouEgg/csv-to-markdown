@@ -1,0 +1,18 @@
+{
+    "sourceFile": "app/layout.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1778571320686,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1778571320686,
+            "name": "Commit-0",
+            "content": "import { Geist, Geist_Mono } from \"next/font/google\";\nimport \"./globals.css\";\n\nconst geistSans = Geist({\n  variable: \"--font-geist-sans\",\n  subsets: [\"latin\"],\n});\n\nconst geistMono = Geist_Mono({\n  variable: \"--font-geist-mono\",\n  subsets: [\"latin\"],\n});\n\nexport const metadata = {\n  title: \"CSV → Markdownテーブル変換 | 無料オンラインツール\",\n  description:\n    \"CSVをMarkdownテーブルに即時変換。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。全角文字・日本語も正確に処理。GitHubのREADMEやNotionのドキュメント作成に。\",\n  keywords: [\n    \"CSV Markdown 変換\",\n    \"CSVをMarkdownに変換\",\n    \"マークダウン テーブル 作成\",\n    \"csv markdownテーブル 変換 オンライン\",\n    \"github readme 表 作り方\",\n  ],\n  openGraph: {\n    title: \"CSV → Markdownテーブル変換 | 無料オンラインツール\",\n    description:\n      \"CSVをMarkdownテーブルに即時変換。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。\",\n    type: \"website\",\n  },\n};\n\nexport default function RootLayout({ children }) {\n  return (\n    <html\n      lang=\"ja\"\n      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}\n    >\n      <body className=\"min-h-full flex flex-col\">{children}</body>\n    </html>\n  );\n}"
+        }
+    ]
+}
