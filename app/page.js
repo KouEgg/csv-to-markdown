@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { csvToMarkdown } from "./lib/csvToMarkdown";
 import { marked } from "marked";
+import * as XLSX from "xlsx";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -45,11 +46,25 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleFile = (file) => {
+const handleFile = (file) => {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => setCsvInput(e.target.result);
-    reader.readAsText(file, "UTF-8");
+
+    const isExcel = file.name.endsWith(".xlsx") || file.name.endsWith(".xls");
+
+    if (isExcel) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const workbook = XLSX.read(e.target.result, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const csv = XLSX.utils.sheet_to_csv(sheet);
+        setCsvInput(csv);
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (e) => setCsvInput(e.target.result);
+      reader.readAsText(file, "UTF-8");
+    }
   };
 
   return (
@@ -167,7 +182,7 @@ export default function Home() {
                   <label style={{ fontSize: "12px", color: "#6b7280", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     ファイルを開く
-                    <input type="file" accept=".csv,.tsv,.txt" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
+                    <input type="file" accept=".csv,.tsv,.txt,.xlsx,.xls" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
                   </label>
                 </div>
               </div>
