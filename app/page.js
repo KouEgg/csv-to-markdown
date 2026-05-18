@@ -19,6 +19,12 @@ const tools = [
     description: "CSVやExcelデータをHTMLテーブルに即時変換。",
     badges: ["Excel対応", "プレビュー表示"],
   },
+  {
+    href: "/markdown-to-csv",
+    title: "Markdown → CSV 変換",
+    description: "MarkdownテーブルをCSV形式に即時変換。GitHubやNotionからデータを取り出すのに便利。",
+    badges: ["逆変換対応"],
+  },
 ];
 
 export default function Home() {
