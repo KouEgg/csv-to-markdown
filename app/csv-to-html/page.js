@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -77,6 +78,7 @@ export default function CsvToHtml() {
   const [hasHeader, setHasHeader] = useState(true);
   const [delimiter, setDelimiter] = useState(",");
   const [isDragging, setIsDragging] = useState(false);
+  const [fileName, setFileName] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [stats, setStats] = useState(null);
 
@@ -98,17 +100,12 @@ export default function CsvToHtml() {
 
   const handleDownload = () => {
     if (!htmlOutput) return;
-    const blob = new Blob([htmlOutput], { type: "text/html;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "output.html";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadFile(htmlOutput, fileName, "html", "text/html;charset=utf-8;");
   };
 
   const handleFile = (file) => {
     if (!file) return;
+    setFileName(file.name);
     const isExcel = file.name.endsWith(".xlsx") || file.name.endsWith(".xls");
     if (isExcel) {
       const reader = new FileReader();

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -58,6 +59,7 @@ export default function MarkdownToCsv() {
   const [copied, setCopied] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [stats, setStats] = useState(null);
+  const [fileName, setFileName] = useState(null);
 
   const csvOutput = markdownToCsv(mdInput);
 
@@ -77,17 +79,12 @@ export default function MarkdownToCsv() {
 
   const handleDownload = () => {
     if (!csvOutput) return;
-    const blob = new Blob([csvOutput], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "output.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadFile(csvOutput, fileName, "csv", "text/csv;charset=utf-8;");
   };
 
   const handleFile = (file) => {
     if (!file) return;
+    setFileName(file.name);
     const reader = new FileReader();
     reader.onload = (e) => setMdInput(e.target.result);
     reader.readAsText(file, "UTF-8");

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { csvToJson } from "../lib/csvToJson";
 import * as XLSX from "xlsx";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -25,6 +26,7 @@ export default function CsvToJsonPage() {
   const [hasHeader, setHasHeader] = useState(true);
   const [delimiter, setDelimiter] = useState(",");
   const [isDragging, setIsDragging] = useState(false);
+  const [fileName, setFileName] = useState(null);
   const isMobile = useWindowWidth() < 768;
 
   const { json: jsonOutput, error, rows, cols } = csvToJson(csvInput, { hasHeader, delimiter });
@@ -38,32 +40,15 @@ export default function CsvToJsonPage() {
 
   const handleDownload = () => {
     if (!jsonOutput) return;
-    const blob = new Blob([jsonOutput], { type: "application/json;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "output.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadFile(jsonOutput, fileName, "json", "application/json;charset=utf-8;");
   };
 
   const handleFile = (file) => {
     if (!file) return;
-    const isExcel = file.name.endsWith(".xlsx") || file.name.endsWith(".xls");
-    if (isExcel) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const workbook = XLSX.read(e.target.result, { type: "array" });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const csv = XLSX.utils.sheet_to_csv(sheet);
-        setCsvInput(csv);
-      };
-      reader.readAsArrayBuffer(file);
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => setCsvInput(e.target.result);
-      reader.readAsText(file, "UTF-8");
-    }
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (e) => setCsvInput(e.target.result);
+    reader.readAsText(file, "UTF-8");
   };
 
   return (

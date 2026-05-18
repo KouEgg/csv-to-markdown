@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { downloadAsExcel } from "../lib/csvToExcel";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -16,11 +17,18 @@ function useWindowWidth() {
   return width;
 }
 
+function replaceExtension(fileName, newExtension) {
+  const lastDot = fileName.lastIndexOf(".");
+  if (lastDot === -1) return `${fileName}.${newExtension}`;
+  return `${fileName.slice(0, lastDot)}.${newExtension}`;
+}
+
 const SAMPLE_CSV = `name,age,city\nAlice,30,Tokyo\nBob,25,Osaka\n山田 太郎,28,名古屋`;
 
 export default function CsvToExcelPage() {
   const [csvInput, setCsvInput] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [fileName, setFileName] = useState(null);
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
   const isMobile = useWindowWidth() < 768;
@@ -34,12 +42,13 @@ export default function CsvToExcelPage() {
   }, [csvInput]);
 
   const handleDownload = () => {
-    const result = downloadAsExcel(csvInput);
+    const result = downloadAsExcel(csvInput, fileName ? replaceExtension(fileName, "xlsx") : "output.xlsx");
     if (result.error) setError(result.error);
   };
 
   const handleFile = (file) => {
     if (!file) return;
+    setFileName(file.name);
     const reader = new FileReader();
     reader.onload = (e) => setCsvInput(e.target.result);
     reader.readAsText(file, "UTF-8");

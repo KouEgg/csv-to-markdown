@@ -5,6 +5,7 @@ import { csvToMarkdown } from "../lib/csvToMarkdown";
 import { marked } from "marked";
 import * as XLSX from "xlsx";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(
@@ -26,6 +27,7 @@ export default function Home() {
   const [hasHeader, setHasHeader] = useState(true);
   const [delimiter, setDelimiter] = useState(",");
   const [isDragging, setIsDragging] = useState(false);
+  const [fileName, setFileName] = useState(null);
   const [stats, setStats] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [alignment, setAlignment] = useState("none");
@@ -47,11 +49,15 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-const handleFile = (file) => {
+  const handleDownload = () => {
+    if (!markdownOutput) return;
+    downloadFile(markdownOutput, fileName, "md", "text/markdown;charset=utf-8;");
+  };
+
+  const handleFile = (file) => {
     if (!file) return;
-
+    setFileName(file.name);
     const isExcel = file.name.endsWith(".xlsx") || file.name.endsWith(".xls");
-
     if (isExcel) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -256,6 +262,20 @@ const handleFile = (file) => {
                     </button>
                   </div>
                 </div>
+                <button
+                    onClick={handleDownload}
+                    disabled={!markdownOutput}
+                    style={{
+                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
+                      cursor: markdownOutput ? "pointer" : "not-allowed",
+                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
+                      background: markdownOutput ? "#f0fdf4" : "#f3f4f6",
+                      color: markdownOutput ? "#16a34a" : "#9ca3af",
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    ダウンロード
+                  </button>
                 <button
                   onClick={handleCopy}
                   disabled={!markdownOutput}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { excelToCsv, downloadCsv } from "../lib/excelToCsv";
+import { excelToCsv } from "../lib/excelToCsv";
 import ToolLinks from "../components/toolLinks";
+import { downloadFile } from "../lib/download";
 
 const ENCODING_OPTIONS = [
   { value: "utf8bom", label: "UTF-8（BOM付き）", description: "Excelで開いても文字化けしない" },
@@ -44,7 +45,7 @@ export default function ExcelToCsvPage() {
 
   const handleDownload = () => {
     if (!csvOutput) return;
-    downloadCsv(csvOutput, encoding);
+    downloadFile(csvOutput, fileName, "csv", "text/csv;charset=utf-8;", encoding === "utf8bom" ? "\uFEFF" : "");
   };
 
   const handleCopy = () => {
