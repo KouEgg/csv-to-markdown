@@ -62,6 +62,12 @@ const sections = [
     label: "その他",
     tools: [
       {
+        href: "/json-formatter",
+        title: "JSON整形・バリデーター",
+        description: "JSONを貼り付けるだけで即時整形・バリデーション。APIレスポンスの確認に便利。",
+        badges: ["圧縮モード対応", "バリデーション"],
+      },
+      {
         href: "/csv-to-html",
         title: "CSV → HTML テーブル変換",
         description: "CSVやExcelデータをHTMLテーブルに即時変換。Webページへの埋め込みに便利。",

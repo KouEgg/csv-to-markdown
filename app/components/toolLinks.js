@@ -32,6 +32,11 @@ const ALL_TOOLS = [
     description: "ExcelファイルをCSV形式に即時変換。文字化けしないUTF-8に対応。",
   },
   {
+    href: "/json-formatter",
+    title: "JSON整形・バリデーター",
+    description: "JSONを貼り付けるだけで即時整形・バリデーション。圧縮モード対応。",
+  },
+  {
     href: "/csv-to-html",
     title: "CSV → HTML テーブル変換",
     description: "CSVやExcelデータをHTMLテーブルに即時変換。",
