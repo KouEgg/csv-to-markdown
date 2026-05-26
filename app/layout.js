@@ -17,22 +17,27 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: "CSV → Markdownテーブル変換 | 無料オンラインツール",
+  title: "CSV Tools | 無料オンライン変換ツール集",
   description:
-    "CSVをMarkdownテーブルに即時変換。貼り付けるだけでリアルタイム変換、ワンクリックコピー対応。全角文字・日本語も正確に処理。GitHubのREADMEやNotionのドキュメント作成に。",
+    "CSV・Excel・Markdown・JSONの変換ツールを無料で提供しています。登録不要・ブラウザ内で完結。",
   keywords: [
-    "CSV Markdown 変換",
-    "CSVをMarkdownに変換",
-    "マークダウン テーブル 作成",
-    "csv markdownテーブル 変換 オンライン",
-    "github readme 表 作り方",
+    "CSV変換",
+    "Excel CSV変換",
+    "JSON CSV変換",
+    "Markdown変換",
+    "JSON整形",
+    "オンライン変換ツール",
+    "無料",
   ],
   openGraph: {
     title: "CSV Tools | 無料オンライン変換ツール集",
     description:
-      "CSV・Excel・Markdownの変換ツールを無料で提供。登録不要・ブラウザ内で完結。機密情報も安心。",
+      "CSV・Excel・Markdown・JSONの変換ツールを無料で提供。登録不要・ブラウザ内で完結。機密情報も安心。",
     type: "website",
     url: "https://www.kouegg.com",
+  },
+  alternates: {
+    canonical: "https://www.kouegg.com",
   },
 };
 
