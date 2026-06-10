@@ -10,23 +10,23 @@
 }
 
 .markdown-preview th {
-  background: #f3f4f6 !important;
-  color: #374151 !important;
-  font-weight: 600 !important;
+  background: #fdf0eb !important;
+  color: #2d2015 !important;
+  font-weight: 500 !important;
   padding: 7px 12px !important;
-  border: 1px solid #e2e4e9 !important;
+  border: 1px solid #e8e0d8 !important;
 }
 
 .markdown-preview td {
   padding: 7px 12px !important;
-  border: 1px solid #e2e4e9 !important;
-  color: #374151 !important;
+  border: 1px solid #e8e0d8 !important;
+  color: #2d2015 !important;
 }
 
 .markdown-preview tr:nth-child(even) td {
-  background: #fafafa !important;
+  background: #faf6f2 !important;
 }
 
 .tool-card:hover {
-  border-color: #4f6ef7 !important;
+  border-color: #e87c5a !important;
 }

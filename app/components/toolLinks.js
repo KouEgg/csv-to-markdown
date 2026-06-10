@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { COLORS, FONTS, RADIUS } from "../lib/theme";
 
 const ALL_TOOLS = [
   {
@@ -44,13 +45,14 @@ const ALL_TOOLS = [
 ];
 
 const CARD_STYLE = {
-  background: "#fff",
-  border: "1.5px solid #c7d0f8",
-  borderRadius: "12px",
+  background: COLORS.bgCard,
+  border: `1.5px solid ${COLORS.border}`,
+  borderRadius: RADIUS.lg,
   padding: "20px",
   cursor: "pointer",
   boxSizing: "border-box",
   width: "100%",
+  fontFamily: FONTS.sans,
 };
 
 export default function ToolLinks({ current, reverse, reverseLabel }) {
@@ -59,24 +61,19 @@ export default function ToolLinks({ current, reverse, reverseLabel }) {
   );
 
   return (
-    <div>
-      {/* 逆変換ツール */}
+    <div style={{ fontFamily: FONTS.sans }}>
       {reverse && (
         <div style={{ marginBottom: "20px" }}>
-          <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1d23", margin: "0 0 10px" }}>
+          <p style={{ fontSize: "13px", fontWeight: 500, color: COLORS.textPrimary, margin: "0 0 10px" }}>
             逆変換ツール
           </p>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-            gap: "12px",
-          }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "12px" }}>
             <Link href={reverse} style={{ textDecoration: "none", display: "flex" }}>
               <div style={CARD_STYLE}>
-                <p style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 6px" }}>
+                <p style={{ fontSize: "15px", fontWeight: 500, color: COLORS.textPrimary, margin: "0 0 6px" }}>
                   {reverseLabel}
                 </p>
-                <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.6 }}>
+                <p style={{ fontSize: "13px", color: COLORS.textSecondary, margin: 0, lineHeight: 1.6 }}>
                   {ALL_TOOLS.find((t) => t.href === reverse)?.description}
                 </p>
               </div>
@@ -85,8 +82,7 @@ export default function ToolLinks({ current, reverse, reverseLabel }) {
         </div>
       )}
 
-      {/* 他のツール一覧 */}
-      <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1d23", margin: "0 0 10px" }}>
+      <p style={{ fontSize: "13px", fontWeight: 500, color: COLORS.textPrimary, margin: "0 0 10px" }}>
         他のツール
       </p>
       <div style={{
@@ -98,10 +94,10 @@ export default function ToolLinks({ current, reverse, reverseLabel }) {
         {otherTools.map((tool) => (
           <Link key={tool.href} href={tool.href} style={{ textDecoration: "none", display: "flex" }}>
             <div style={CARD_STYLE}>
-              <p style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 6px" }}>
+              <p style={{ fontSize: "15px", fontWeight: 500, color: COLORS.textPrimary, margin: "0 0 6px" }}>
                 {tool.title}
               </p>
-              <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.6 }}>
+              <p style={{ fontSize: "13px", color: COLORS.textSecondary, margin: 0, lineHeight: 1.6 }}>
                 {tool.description}
               </p>
             </div>
