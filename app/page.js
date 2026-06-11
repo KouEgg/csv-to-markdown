@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { COLORS, FONTS } from "./lib/theme";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 // ===================================================
 // メタデータ
@@ -236,7 +238,7 @@ const CONTENTS = [
     label: "Tools",
     title: "CSV Tools",
     text: "CSV・Excel・Markdown・JSONの変換ツール集。ブラウザだけで完結、登録不要・無料で使えます。現在8種類のツールを公開中。",
-    link: { label: "ツール一覧を見る →", href: "/csv-to-markdown" },
+    link: { label: "ツール一覧を見る →", href: "/tools" },
     tags: ["CSV変換", "Excel", "JSON", "Markdown"],
   },
   {
@@ -258,15 +260,7 @@ export default function TopPage() {
     <div style={S.page}>
 
       {/* ナビゲーション */}
-      <nav style={S.nav}>
-        <Link href="/" style={S.navLogo}>
-          KouEgg<span style={S.navLogoEm}>.com</span>
-        </Link>
-        <div style={{ display: "flex", gap: "28px" }}>
-          <Link href="/" style={S.navLink}>Tools</Link>
-          <Link href="/about" style={S.navLink}>About</Link>
-        </div>
-      </nav>
+      <Header />
 
       {/* ヒーロー */}
       <section style={S.hero}>
@@ -332,12 +326,7 @@ export default function TopPage() {
       </section>
 
       {/* フッター */}
-      <footer style={S.footer}>
-        <span style={S.footerText}>© KouEgg — kouegg.com</span>
-        <Link href="/privacy" style={S.footerLink}>
-          プライバシーポリシー
-        </Link>
-      </footer>
+      <Footer />
 
     </div>
   );

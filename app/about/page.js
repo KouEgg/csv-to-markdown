@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { COLORS, FONTS } from "../lib/theme";
+import Header from "../components/header";
+import Footer from "../components/footer";
 
 // ===================================================
 // 定数定義
@@ -263,7 +265,7 @@ const INTERESTS = [
 const LINKS = [
 //   { label: "GitHub", sub: "@KouEgg →", href: "https://github.com/KouEgg" },
   { label: "Zenn", sub: "技術記事 →", href: "https://zenn.dev" },
-  { label: "CSV Tools", sub: "ツール一覧 →", href: "/csv-to-markdown" },
+  { label: "CSV Tools", sub: "ツール一覧 →", href: "/tools" },
 ];
 
 // ===================================================
@@ -275,18 +277,7 @@ export default function AboutPage() {
     <div style={ABOUT_STYLES.page}>
 
       {/* ナビゲーション */}
-      <nav style={ABOUT_STYLES.nav}>
-        <Link href="/" style={ABOUT_STYLES.navLogo}>
-          KouEgg —{" "}
-          <span style={ABOUT_STYLES.navLogoAccent}>CSV Tools</span>
-        </Link>
-        <div style={{ display: "flex", gap: "28px" }}>
-          <Link href="/" style={ABOUT_STYLES.navLink}>Tools</Link>
-          <span style={{ ...ABOUT_STYLES.navLink, opacity: 1, borderBottom: `1px solid ${COLORS.textPrimary}`, paddingBottom: "1px" }}>
-            About
-          </span>
-        </div>
-      </nav>
+      <Header />
 
       {/* ヒーロー */}
       {/* <section style={ABOUT_STYLES.hero}>
@@ -371,18 +362,13 @@ export default function AboutPage() {
         <p style={ABOUT_STYLES.toolsTeaserText}>
           作ったツールは<br />こちらから使えます
         </p>
-        <Link href="/" style={ABOUT_STYLES.toolsTeaserLink}>
+        <Link href="/tools" style={ABOUT_STYLES.toolsTeaserLink}>
           CSV Tools を見る →
         </Link>
       </section>
 
       {/* フッター */}
-      <footer style={ABOUT_STYLES.footerBar}>
-        <span style={ABOUT_STYLES.footerText}>© KouEgg — kouegg.com</span>
-        <Link href="/privacy" style={{ fontSize: "11px", color: COLORS.textMuted, textDecoration: "none" }}>
-          プライバシーポリシー
-        </Link>
-      </footer>
+      <Footer />
 
     </div>
   );
