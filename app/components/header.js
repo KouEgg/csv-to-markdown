@@ -41,6 +41,15 @@ export default function Header() {
         }}>
           About
         </Link>
+        <Link href="/contact" style={{
+          fontSize: "12px",
+          color: COLORS.textPrimary,
+          textDecoration: "none",
+          letterSpacing: "0.04em",
+          opacity: 0.5,
+        }}>
+          Contact
+        </Link>
       </nav>
     </header>
   );
