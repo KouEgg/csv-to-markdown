@@ -1,189 +1,342 @@
 import Link from "next/link";
-import { COLORS, FONTS, RADIUS } from "./lib/theme";
+import { COLORS, FONTS } from "./lib/theme";
+
+// ===================================================
+// メタデータ
+// ===================================================
 
 export const metadata = {
-  title: "CSV Tools | 無料オンライン変換ツール集",
+  title: "KouEgg.com",
   description:
-    "CSV・Excel・Markdown・JSONの変換ツールを無料で提供しています。登録不要・ブラウザ内で完結。",
-  keywords: [
-    "CSV変換",
-    "Excel CSV変換",
-    "JSON CSV変換",
-    "Markdown変換",
-    "JSON整形",
-    "オンライン変換ツール",
-    "無料",
-  ],
+    "ひよっこエンジニアKouEggの個人サイト。CSV・Excel・Markdown・JSONの変換ツール集を公開中。今後もツールや記事など作ったものを置いていく予定です。",
+  openGraph: {
+    title: "KouEgg.com",
+    description:
+      "ひよっこエンジニアKouEggの個人サイト。CSV変換ツール集を公開中。",
+    url: "https://www.kouegg.com",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://www.kouegg.com",
+  },
 };
 
-const sections = [
+// ===================================================
+// 定数定義
+// ===================================================
+
+const S = {
+  page: {
+    minHeight: "100vh",
+    background: COLORS.bg,
+    fontFamily: FONTS.sans,
+    color: COLORS.textPrimary,
+  },
+  nav: {
+    background: COLORS.bg,
+    borderBottom: `1px solid ${COLORS.textPrimary}`,
+    padding: "0 40px",
+    height: "52px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  navLogo: {
+    fontSize: "14px",
+    fontWeight: 500,
+    color: COLORS.textPrimary,
+    letterSpacing: "0.02em",
+    textDecoration: "none",
+  },
+  navLogoEm: {
+    color: COLORS.accent,
+    fontStyle: "normal",
+  },
+  navLink: {
+    fontSize: "12px",
+    color: COLORS.textPrimary,
+    opacity: 0.5,
+    textDecoration: "none",
+    letterSpacing: "0.04em",
+  },
+  hero: {
+    padding: "72px 40px 64px",
+    borderBottom: `1px solid ${COLORS.textPrimary}`,
+    display: "grid",
+    gridTemplateColumns: "3fr 2fr",
+    gap: "60px",
+    alignItems: "end",
+  },
+  heroEyebrow: {
+    fontSize: "11px",
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+    color: COLORS.accent,
+    marginBottom: "18px",
+  },
+  heroTitle: {
+    fontFamily: "Instrument Serif, serif",
+    fontSize: "64px",
+    lineHeight: 1.0,
+    color: COLORS.textPrimary,
+    letterSpacing: "-0.03em",
+  },
+  heroTitleEm: {
+    fontStyle: "italic",
+    color: "#d4724f",
+  },
+  heroDesc: {
+    fontSize: "13px",
+    lineHeight: 1.9,
+    color: COLORS.textSecondary,
+    marginBottom: "20px",
+  },
+  heroMeta: {
+    fontSize: "11px",
+    color: COLORS.textMuted,
+    letterSpacing: "0.04em",
+    borderLeft: `2px solid ${COLORS.accent}`,
+    paddingLeft: "10px",
+    lineHeight: 1.7,
+  },
+  contentsHeader: {
+    padding: "24px 40px",
+    borderBottom: `0.5px solid rgba(26,20,16,0.2)`,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+  },
+  contentsLabel: {
+    fontSize: "10px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    color: COLORS.textPrimary,
+    opacity: 0.35,
+  },
+  contentsDesc: {
+    fontSize: "12px",
+    color: COLORS.textMuted,
+  },
+  contentRow: {
+    display: "grid",
+    gridTemplateColumns: "200px 1fr",
+    borderBottom: `1px solid ${COLORS.textPrimary}`,
+  },
+  contentCategory: {
+    padding: "32px 40px",
+    borderRight: `1px solid ${COLORS.textPrimary}`,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  contentCategoryNum: {
+    fontFamily: "Instrument Serif, serif",
+    fontSize: "48px",
+    color: COLORS.border,
+    lineHeight: 1,
+  },
+  contentCategoryLabel: {
+    fontSize: "10px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    color: COLORS.accent,
+  },
+  contentBody: {
+    padding: "32px 40px",
+  },
+  contentTitle: {
+    fontFamily: "Instrument Serif, serif",
+    fontSize: "28px",
+    color: COLORS.textPrimary,
+    marginBottom: "10px",
+    lineHeight: 1.2,
+  },
+  contentText: {
+    fontSize: "12px",
+    color: COLORS.textMuted,
+    lineHeight: 1.8,
+    marginBottom: "16px",
+    maxWidth: "480px",
+  },
+  contentLink: {
+    fontSize: "11px",
+    color: COLORS.textPrimary,
+    textDecoration: "none",
+    letterSpacing: "0.06em",
+    borderBottom: `1px solid rgba(26,20,16,0.3)`,
+    paddingBottom: "1px",
+    opacity: 0.7,
+  },
+  contentTags: {
+    display: "flex",
+    gap: "6px",
+    marginTop: "12px",
+    flexWrap: "wrap",
+  },
+  contentTag: {
+    fontSize: "10px",
+    padding: "2px 8px",
+    border: `0.5px solid rgba(232,124,90,0.4)`,
+    color: COLORS.accentText,
+    letterSpacing: "0.02em",
+  },
+  aboutStrip: {
+    background: COLORS.textPrimary,
+    padding: "32px 40px",
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
+    alignItems: "center",
+    gap: "40px",
+  },
+  aboutStripText: {
+    fontFamily: "Instrument Serif, serif",
+    fontSize: "20px",
+    color: COLORS.bg,
+    lineHeight: 1.4,
+  },
+  aboutStripTextEm: {
+    fontStyle: "italic",
+    color: COLORS.accent,
+  },
+  aboutStripLink: {
+    fontSize: "11px",
+    color: COLORS.accent,
+    letterSpacing: "0.06em",
+    borderBottom: `0.5px solid ${COLORS.accent}`,
+    paddingBottom: "1px",
+    textDecoration: "none",
+    whiteSpace: "nowrap",
+  },
+  footer: {
+    padding: "18px 40px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    background: COLORS.bgCard,
+    borderTop: `0.5px solid ${COLORS.border}`,
+  },
+  footerText: {
+    fontSize: "11px",
+    color: COLORS.textMuted,
+  },
+  footerLink: {
+    fontSize: "11px",
+    color: COLORS.textMuted,
+    textDecoration: "none",
+  },
+};
+
+// ===================================================
+// データ定義
+// ===================================================
+
+const CONTENTS = [
   {
-    label: "CSV ↔ Markdown",
-    tools: [
-      {
-        href: "/csv-to-markdown",
-        title: "CSV → Markdown 変換",
-        description: "CSVやExcelデータをMarkdownテーブルに即時変換。GitHubのREADMEやNotionのドキュメント作成に便利。",
-        badges: ["Excel対応", "プレビュー表示", "整列オプション"],
-      },
-      {
-        href: "/markdown-to-csv",
-        title: "Markdown → CSV 変換",
-        description: "MarkdownテーブルをCSV形式に即時変換。GitHubやNotionからデータを取り出すのに便利。",
-        badges: ["ダウンロード対応", "日本語対応"],
-      },
-    ],
+    num: "01",
+    label: "Tools",
+    title: "CSV Tools",
+    text: "CSV・Excel・Markdown・JSONの変換ツール集。ブラウザだけで完結、登録不要・無料で使えます。現在8種類のツールを公開中。",
+    link: { label: "ツール一覧を見る →", href: "/csv-to-markdown" },
+    tags: ["CSV変換", "Excel", "JSON", "Markdown"],
   },
   {
-    label: "CSV ↔ JSON",
-    tools: [
-      {
-        href: "/csv-to-json",
-        title: "CSV → JSON 変換",
-        description: "CSVやExcelデータをJSON形式に即時変換。WebアプリやAPIへのデータ連携に便利。",
-        badges: ["Excel対応", "ダウンロード対応", "日本語対応"],
-      },
-      {
-        href: "/json-to-csv",
-        title: "JSON → CSV 変換",
-        description: "JSONデータをCSV形式に即時変換。ネスト・階層構造も自動フラット化。APIレスポンスをExcelで開きたいときに便利。",
-        badges: ["ネスト対応", "ダウンロード対応"],
-      },
-    ],
-  },
-  {
-    label: "CSV ↔ Excel",
-    tools: [
-      {
-        href: "/csv-to-excel",
-        title: "CSV → Excel 変換",
-        description: "CSVデータをExcelファイル（.xlsx）に即時変換。文字化けの心配なく開ける。",
-        badges: ["ダウンロード対応", "日本語対応"],
-      },
-      {
-        href: "/excel-to-csv",
-        title: "Excel → CSV 変換",
-        description: "ExcelファイルをCSV形式に即時変換。UTF-8・BOM付きで文字化けしないCSVを出力。",
-        badges: ["UTF-8対応", "ダウンロード対応"],
-      },
-    ],
-  },
-  {
-    label: "その他",
-    tools: [
-      {
-        href: "/csv-to-html",
-        title: "CSV → HTML テーブル変換",
-        description: "CSVやExcelデータをHTMLテーブルに即時変換。Webページへの埋め込みに便利。",
-        badges: ["Excel対応", "プレビュー表示"],
-      },
-      {
-        href: "/json-formatter",
-        title: "JSON整形・バリデーター",
-        description: "JSONを貼り付けるだけで即時整形・バリデーション。APIレスポンスの確認に便利。",
-        badges: ["圧縮モード対応", "バリデーション"],
-      },
-    ],
+    num: "02",
+    label: "Coming Soon",
+    title: "More to come",
+    text: "開発者向けの小さなツールをもっと追加していく予定です。Base64変換・URLエンコード・タイムスタンプ変換など。",
+    link: null,
+    tags: [],
   },
 ];
 
-export default function Home() {
+// ===================================================
+// コンポーネント
+// ===================================================
+
+export default function TopPage() {
   return (
-    <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: FONTS.sans }}>
+    <div style={S.page}>
 
-      <header style={{
-        background: COLORS.bgCard,
-        borderBottom: `2px solid ${COLORS.accent}`,
-        padding: "0 32px",
-        height: "52px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}>
-        <span style={{ fontSize: "16px", fontWeight: 500, color: COLORS.textPrimary, letterSpacing: "-0.01em" }}>
-          CSV <span style={{ color: COLORS.accent }}>Tools</span>
-        </span>
-        <span style={{ fontSize: "12px", color: COLORS.textMuted }}>無料・登録不要</span>
-      </header>
+      {/* ナビゲーション */}
+      <nav style={S.nav}>
+        <Link href="/" style={S.navLogo}>
+          KouEgg<span style={S.navLogoEm}>.com</span>
+        </Link>
+        <div style={{ display: "flex", gap: "28px" }}>
+          <Link href="/" style={S.navLink}>Tools</Link>
+          <Link href="/about" style={S.navLink}>About</Link>
+        </div>
+      </nav>
 
-      <main style={{ maxWidth: "900px", margin: "0 auto", padding: "48px 24px 80px" }}>
-
-        <div style={{ marginBottom: "40px" }}>
-          <h1 style={{ fontSize: "26px", fontWeight: 500, color: COLORS.textPrimary, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
-            CSV Tools
+      {/* ヒーロー */}
+      <section style={S.hero}>
+        <div>
+          <p style={S.heroEyebrow}>KouEgg.com</p>
+          <h1 style={S.heroTitle}>
+            <em style={S.heroTitleEm}>ひよっこ</em><br />
+            エンジニアの<br />
+            <em style={S.heroTitleEm}>個人</em>サイト。
           </h1>
-          <p style={{ fontSize: "14px", color: COLORS.textSecondary, margin: 0, lineHeight: 1.7 }}>
-            CSV・Excel・Markdown・JSONの変換ツールを無料で提供しています。登録不要・ブラウザ内で完結。
+        </div>
+        <div>
+          <p style={S.heroDesc}>
+            現在はCSV・Excel・Markdown・JSONの変換ツール集「CSV Tools」を公開中。今後はツールや記事など、作ったものをここに置いていく予定です。
+          </p>
+          <p style={S.heroMeta}>
+            C# / Kotlin / Next.js<br />
+            Software Engineer — KouEgg
           </p>
         </div>
+      </section>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-          {sections.map((section) => (
-            <div key={section.label}>
-              <p style={{
-                fontSize: "11px", fontWeight: 500, color: COLORS.textMuted,
-                letterSpacing: "0.08em", textTransform: "uppercase", margin: "0 0 10px",
-              }}>
-                {section.label}
-              </p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "12px" }}>
-                {section.tools.map((tool) => (
-                  <Link key={tool.href} href={tool.href} style={{ textDecoration: "none" }}>
-                    <div className="tool-card" style={{
-                      background: COLORS.bgCard,
-                      border: `0.5px solid ${COLORS.border}`,
-                      borderRadius: RADIUS.lg,
-                      padding: "20px",
-                      cursor: "pointer",
-                      transition: "border-color 0.15s",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                      height: "100%",
-                      boxSizing: "border-box",
-                    }}>
-                      <h2 style={{ fontSize: "15px", fontWeight: 500, color: COLORS.textPrimary, margin: 0 }}>
-                        {tool.title}
-                      </h2>
-                      <p style={{ fontSize: "13px", color: COLORS.textSecondary, margin: 0, lineHeight: 1.6, flex: 1 }}>
-                        {tool.description}
-                      </p>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                        {tool.badges.map((badge) => (
-                          <span key={badge} style={{
-                            fontSize: "11px", padding: "3px 8px", borderRadius: RADIUS.full,
-                            background: COLORS.accentBg, color: COLORS.accentText, fontWeight: 500,
-                          }}>
-                            {badge}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </Link>
+      {/* コンテンツ一覧 */}
+      <div style={S.contentsHeader}>
+        <span style={S.contentsLabel}>Contents</span>
+        <span style={S.contentsDesc}>このサイトにあるもの</span>
+      </div>
+
+      {CONTENTS.map((item) => (
+        <div key={item.num} style={S.contentRow}>
+          <div style={S.contentCategory}>
+            <div style={S.contentCategoryNum}>{item.num}</div>
+            <div style={S.contentCategoryLabel}>{item.label}</div>
+          </div>
+          <div style={S.contentBody}>
+            <h2 style={S.contentTitle}>{item.title}</h2>
+            <p style={S.contentText}>{item.text}</p>
+            {item.link && (
+              <Link href={item.link.href} style={S.contentLink}>
+                {item.link.label}
+              </Link>
+            )}
+            {item.tags.length > 0 && (
+              <div style={S.contentTags}>
+                {item.tags.map((tag) => (
+                  <span key={tag} style={S.contentTag}>{tag}</span>
                 ))}
               </div>
-            </div>
-          ))}
+            )}
+          </div>
         </div>
+      ))}
 
-      </main>
+      {/* Aboutへの誘導 */}
+      <section style={S.aboutStrip}>
+        <p style={S.aboutStripText}>
+          このサイトを作った<br />
+          <em style={S.aboutStripTextEm}>KouEgg</em> について
+        </p>
+        <Link href="/about" style={S.aboutStripLink}>
+          About を見る →
+        </Link>
+      </section>
 
-      <footer style={{
-        borderTop: `0.5px solid ${COLORS.border}`,
-        padding: "18px 32px",
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        alignItems: "center",
-        background: COLORS.bgCard,
-      }}>
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-          <a href="/privacy" style={{ fontSize: "12px", color: COLORS.textSecondary, textDecoration: "none" }}>
-            プライバシーポリシー
-          </a>
-        </div>
-        <span style={{ fontSize: "12px", color: COLORS.textMuted }}>CSV Tools — 無料オンラインツール集</span>
+      {/* フッター */}
+      <footer style={S.footer}>
+        <span style={S.footerText}>© KouEgg — kouegg.com</span>
+        <Link href="/privacy" style={S.footerLink}>
+          プライバシーポリシー
+        </Link>
       </footer>
 
     </div>
