@@ -1,15 +1,63 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { csvToHtml } from "../lib/csvToHtml";
 import * as XLSX from "xlsx";
 import ToolLinks from "../components/toolLinks";
 import { downloadFile } from "../lib/download";
 import { useWindowWidth } from "../hooks/useWindowWidth";
-import Header from "../components/header";
-import Footer from "../components/footer";
-import { csvToHtml } from "../lib/csvToHtml";
+import ToolPageLayout from "../components/ToolPageLayout";
+import ToolCard from "../components/ToolCard";
+import ToolMeta from "../components/ToolMeta";
+import ToolDivider from "../components/ToolDivider";
+import StepList from "../components/StepList";
+import FaqList from "../components/FaqList";
+import ToolAbout from "../components/ToolAbout";
+import ToolGuide from "../components/ToolGuide";
+import { COLORS, FONTS } from "../lib/theme";
 
-export default function CsvToHtml() {
+const SAMPLE_CSV = `name,age,city\nAlice,30,Tokyo\nBob,25,Osaka\n山田 太郎,28,名古屋`;
+
+const STEPS = [
+  "左のエリアにCSVを貼り付けるか、ファイルをドロップして読み込んでください。ExcelファイルはそのままドロップするかExcelファイルを開くで選択できます（.xlsx / .xls対応）",
+  "スタイルオプションで「シンプル」または「ストライプ」を選ぶとCSSスタイル付きのHTMLが出力されます",
+  "右側にHTMLが即時表示されます。「プレビュー」タブで見た目を確認してから「コピー」または「ダウンロード」で取り出してください",
+];
+
+const FAQ = [
+  {
+    q: "スタイルオプションの違いは何ですか？",
+    a: "「なし」は素のHTMLテーブルを出力します。「シンプル」はボーダーとヘッダー背景付きの読みやすいテーブルです。「ストライプ」はヘッダーと縞模様のデザインで視認性の高いテーブルを出力します。いずれもCSSがHTMLに含まれているのでそのまま貼り付けて使えます。",
+  },
+  {
+    q: "WordPressやはてなブログに貼り付けられますか？",
+    a: "はい。投稿編集画面のHTMLモード（カスタムHTMLブロック）に出力されたHTMLをそのまま貼り付けてください。CSSも含まれているので見栄えの良いテーブルが表示されます。",
+  },
+  {
+    q: "機密情報を含むデータを変換しても大丈夫ですか？",
+    a: "はい。すべての変換処理はブラウザ上で完結しており、入力データが外部サーバーに送信されることは一切ありません。",
+  },
+];
+
+const GUIDE = {
+  title: "CSVをHTMLテーブルに変換する用途",
+  items: [
+    {
+      heading: "WordPressやブログへの貼り付け",
+      body: "WordPressの投稿エディターでは、テーブルを手書きのHTMLで挿入することができます。このツールでCSVを変換してそのまま貼り付けるだけで、CSSの知識がなくても見栄えの良いテーブルを素早く作れます。スタイルオプションで「シンプル」または「ストライプ」を選ぶとCSSが自動的に付与されます。",
+    },
+    {
+      heading: "WebページへのHTMLテーブル埋め込み",
+      body: "HTMLファイルに直接テーブルを埋め込みたいときにも活用できます。「なし」スタイルで素のHTMLを出力し、自分のCSSで自由にスタイリングすることも可能です。",
+    },
+    {
+      heading: "スタイル付きHTMLの仕組み",
+      body: "「シンプル」「ストライプ」スタイルを選択すると、テーブルのHTMLに `<style>` タグ付きのCSSが付与されます。このCSSはインラインで完結しているため、外部CSSファイルなしでそのまま使えます。",
+    },
+  ],
+};
+
+export default function CsvToHtmlPage() {
   const [csvInput, setCsvInput] = useState("");
   const [copied, setCopied] = useState(false);
   const [hasHeader, setHasHeader] = useState(true);
@@ -19,6 +67,8 @@ export default function CsvToHtml() {
   const [showPreview, setShowPreview] = useState(false);
   const [tableStyle, setTableStyle] = useState("none");
   const [stats, setStats] = useState(null);
+  const isMobile = useWindowWidth() < 768;
+
   const htmlOutput = csvToHtml(csvInput, { hasHeader, delimiter, tableStyle });
 
   useEffect(() => {
@@ -59,246 +109,137 @@ export default function CsvToHtml() {
     }
   };
 
-  const isMobile = useWindowWidth() < 768;
-  const SAMPLE_CSV = `name,age,city\nAlice,30,Tokyo\nBob,25,Osaka\n山田 太郎,28,名古屋`;
-
   return (
-    <div style={{ minHeight: "100vh", background: "#f4f5f7", fontFamily: "system-ui, sans-serif" }}>
+    <ToolPageLayout>
+      <ToolMeta title="CSV → HTML テーブル変換" description="CSVを貼り付けるだけでHTMLテーブルに即時変換。スタイルオプション・プレビュー表示付き。" />
 
-      {/* ヘッダー */}
-      <Header />
+      <ToolCard>
+        {/* オプションバー */}
+        <div style={{ padding: "11px 18px", borderBottom: `0.5px solid ${COLORS.borderLight}`, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
 
-      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "36px 24px 80px" }}>
-
-        <div style={{ marginBottom: "24px" }}>
-          <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#1a1d23", margin: "0 0 6px", letterSpacing: "-0.02em" }}>
-            CSV → HTML テーブル変換
-          </h1>
-          <p style={{ fontSize: "13px", color: "#6b7280", margin: "0 0 14px", lineHeight: 1.6 }}>
-            CSVやExcelデータをHTMLテーブルに即時変換。
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {["⚡ リアルタイム変換", "📊 Excel対応（.xlsx / .xls）", "👁 プレビュー表示", "🎨 スタイルオプション", "🇯🇵 日本語・全角文字対応", "🔒 機密データも安心（サーバー送信なし）", "✅ 登録不要・完全無料"].map((label) => (
-              <span key={label} style={{ fontSize: "12px", padding: "5px 10px", borderRadius: "20px", background: "#eef0fd", color: "#4f6ef7", fontWeight: 500 }}>
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ background: "#fff", border: "0.5px solid #e2e4e9", borderRadius: "12px", overflow: "hidden" }}>
-
-          <div style={{ padding: "11px 18px", borderBottom: "0.5px solid #f0f1f4", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 10px", borderRadius: "6px", border: "0.5px solid #e2e4e9", background: "#f9fafb" }}>
-                <span style={{ fontSize: "12px", color: "#374151" }}>1行目をヘッダーとして扱う</span>
-                <div onClick={() => setHasHeader(!hasHeader)} style={{ width: "32px", height: "18px", borderRadius: "9px", background: hasHeader ? "#4f6ef7" : "#d1d5db", display: "flex", alignItems: "center", padding: "2px", boxSizing: "border-box", cursor: "pointer", transition: "background 0.2s", flexShrink: 0 }}>
-                  <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#fff", marginLeft: hasHeader ? "auto" : "0", transition: "margin 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }} />
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 10px", borderRadius: "6px", border: "0.5px solid #e2e4e9", background: "#f9fafb" }}>
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 5h12M2 8h8M2 11h10" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                <span style={{ fontSize: "12px", color: "#6b7280" }}>区切り文字</span>
-                <select value={delimiter} onChange={(e) => setDelimiter(e.target.value)} style={{ fontSize: "12px", color: "#374151", border: "none", background: "transparent", cursor: "pointer", outline: "none" }}>
-                  <option value=",">カンマ（,）</option>
-                  <option value={"\t"}>タブ</option>
-                  <option value=";">セミコロン（;）</option>
-                </select>
+            {/* ヘッダートグル */}
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 10px", borderRadius: "6px", border: `0.5px solid ${COLORS.border}`, background: COLORS.bgOption }}>
+              <span style={{ fontSize: "12px", color: COLORS.textPrimary }}>1行目をヘッダーとして扱う</span>
+              <div onClick={() => setHasHeader(!hasHeader)} style={{ width: "32px", height: "18px", borderRadius: "9px", background: hasHeader ? COLORS.accent : COLORS.borderLight, display: "flex", alignItems: "center", padding: "2px", boxSizing: "border-box", cursor: "pointer", flexShrink: 0 }}>
+                <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: COLORS.bgCard, marginLeft: hasHeader ? "auto" : "0", boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }} />
               </div>
             </div>
+
+            {/* 区切り文字 */}
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 10px", borderRadius: "6px", border: `0.5px solid ${COLORS.border}`, background: COLORS.bgOption }}>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 5h12M2 8h8M2 11h10" stroke={COLORS.textSecondary} strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <span style={{ fontSize: "12px", color: COLORS.textSecondary }}>区切り文字</span>
+              <select value={delimiter} onChange={(e) => setDelimiter(e.target.value)} style={{ fontSize: "12px", color: COLORS.textPrimary, border: "none", background: "transparent", cursor: "pointer", outline: "none" }}>
+                <option value=",">カンマ（,）</option>
+                <option value={"\t"}>タブ</option>
+                <option value=";">セミコロン（;）</option>
+              </select>
+            </div>
+
             {/* スタイルオプション */}
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 10px", borderRadius: "6px", border: "0.5px solid #e2e4e9", background: "#f9fafb" }}>
-              <span style={{ fontSize: "12px", color: "#6b7280" }}>スタイル</span>
-              <div style={{ display: "flex", background: "#f3f4f6", borderRadius: "4px", padding: "2px", gap: "1px" }}>
-                {[
-                  { value: "none", label: "なし" },
-                  { value: "simple", label: "シンプル" },
-                  { value: "stripe", label: "ストライプ" },
-                ].map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setTableStyle(opt.value)}
-                    style={{
-                      fontSize: "11px", padding: "3px 8px", borderRadius: "3px", border: "none",
-                      cursor: "pointer", fontWeight: 500, transition: "all 0.15s",
-                      background: tableStyle === opt.value ? "#fff" : "transparent",
-                      color: tableStyle === opt.value ? "#374151" : "#9ca3af",
-                    }}
-                  >
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 10px", borderRadius: "6px", border: `0.5px solid ${COLORS.border}`, background: COLORS.bgOption }}>
+              <span style={{ fontSize: "12px", color: COLORS.textSecondary }}>スタイル</span>
+              <div style={{ display: "flex", background: COLORS.bg, borderRadius: "4px", padding: "2px", gap: "1px" }}>
+                {[{ value: "none", label: "なし" }, { value: "simple", label: "シンプル" }, { value: "stripe", label: "ストライプ" }].map((opt) => (
+                  <button key={opt.value} onClick={() => setTableStyle(opt.value)} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "3px", border: "none", cursor: "pointer", fontWeight: 500, background: tableStyle === opt.value ? COLORS.bgCard : "transparent", color: tableStyle === opt.value ? COLORS.textPrimary : COLORS.textMuted }}>
                     {opt.label}
                   </button>
                 ))}
               </div>
             </div>
-            {!csvInput && (
-              <button onClick={() => setCsvInput(SAMPLE_CSV)} style={{ fontSize: "12px", color: "#4f6ef7", background: "none", border: "none", cursor: "pointer", padding: 0, fontWeight: 500 }}>
-                サンプルを試す →
-              </button>
-            )}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
+          {!csvInput && (
+            <button onClick={() => setCsvInput(SAMPLE_CSV)} style={{ fontSize: "12px", color: COLORS.accent, background: "none", border: "none", cursor: "pointer", padding: 0, fontWeight: 500 }}>
+              サンプルを試す →
+            </button>
+          )}
+        </div>
 
-            <div style={{ borderRight: isMobile ? "none" : "0.5px solid #f0f1f4", borderBottom: isMobile ? "0.5px solid #f0f1f4" : "none", display: "flex", flexDirection: "column" }}>
-              <div style={{ padding: "10px 16px", borderBottom: "0.5px solid #f0f1f4", background: "#fafafa", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151" }}>CSV 入力</span>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  {csvInput && (
-                    <button onClick={() => setCsvInput("")} style={{ fontSize: "12px", color: "#9ca3af", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "3px", padding: 0 }}>
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                      クリア
-                    </button>
-                  )}
-                  <label style={{ fontSize: "12px", color: "#6b7280", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    ファイルを開く
-                    <input type="file" accept=".csv,.tsv,.txt,.xlsx,.xls" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
-                  </label>
-                </div>
-              </div>
-              <div style={{ position: "relative", flex: 1 }} onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFile(e.dataTransfer.files[0]); }} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}>
-                <textarea
-                  style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontFamily: "ui-monospace, monospace", fontSize: "13px", lineHeight: "1.7", color: "#1f2937", resize: "none", border: "none", outline: "none", background: isDragging ? "#eef0fd" : "transparent", boxSizing: "border-box" }}
-                  placeholder={"name,age,city\nAlice,30,Tokyo\n\nここにCSVを貼り付け\nまたはファイルをドロップ"}
-                  value={csvInput}
-                  onChange={(e) => setCsvInput(e.target.value)}
-                />
-                {isDragging && (
-                  <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(238,240,253,0.92)", border: "2px dashed #4f6ef7", borderRadius: "4px", pointerEvents: "none" }}>
-                    <span style={{ color: "#4f6ef7", fontWeight: 600, fontSize: "14px" }}>ここにドロップ</span>
-                  </div>
+        {/* 入力・出力 2カラム */}
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
+
+          {/* 左：入力 */}
+          <div style={{ borderRight: isMobile ? "none" : `0.5px solid ${COLORS.borderLight}`, borderBottom: isMobile ? `0.5px solid ${COLORS.borderLight}` : "none", display: "flex", flexDirection: "column" }}>
+            <div style={{ padding: "10px 16px", borderBottom: `0.5px solid ${COLORS.borderLight}`, background: COLORS.bgOption, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "13px", fontWeight: 700, color: COLORS.textPrimary }}>CSV 入力</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                {csvInput && (
+                  <button onClick={() => setCsvInput("")} style={{ fontSize: "12px", color: COLORS.textMuted, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "3px", padding: 0 }}>
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                    クリア
+                  </button>
                 )}
+                <label style={{ fontSize: "12px", color: COLORS.textSecondary, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  ファイルを開く
+                  <input type="file" accept=".csv,.tsv,.txt,.xlsx,.xls" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
+                </label>
               </div>
             </div>
-
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ padding: "10px 16px", borderBottom: "0.5px solid #f0f1f4", background: "#fafafa", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151" }}>HTML 出力</span>
-                  <div style={{ display: "flex", background: "#f3f4f6", borderRadius: "6px", padding: "2px" }}>
-                    <button onClick={() => setShowPreview(false)} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: !showPreview ? "#fff" : "transparent", color: !showPreview ? "#374151" : "#9ca3af", transition: "all 0.15s" }}>テキスト</button>
-                    <button onClick={() => setShowPreview(true)} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: showPreview ? "#fff" : "transparent", color: showPreview ? "#374151" : "#9ca3af", transition: "all 0.15s" }}>プレビュー</button>
-                  </div>
+            <div style={{ position: "relative", flex: 1 }} onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFile(e.dataTransfer.files[0]); }} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}>
+              <textarea style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontFamily: FONTS.mono, fontSize: "13px", lineHeight: "1.7", color: COLORS.textPrimary, resize: "none", border: "none", outline: "none", background: isDragging ? COLORS.accentBg : "transparent", boxSizing: "border-box" }} placeholder={"name,age,city\nAlice,30,Tokyo\n\nここにCSVを貼り付け\nまたはファイルをドロップ"} value={csvInput} onChange={(e) => setCsvInput(e.target.value)} />
+              {isDragging && (
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: `${COLORS.accentBg}ee`, border: `2px dashed ${COLORS.accent}`, borderRadius: "4px", pointerEvents: "none" }}>
+                  <span style={{ color: COLORS.accent, fontWeight: 600, fontSize: "14px" }}>ここにドロップ</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <button
-                    onClick={handleDownload}
-                    disabled={!htmlOutput}
-                    style={{
-                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
-                      cursor: htmlOutput ? "pointer" : "not-allowed",
-                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
-                      background: htmlOutput ? "#f0fdf4" : "#f3f4f6",
-                      color: htmlOutput ? "#16a34a" : "#9ca3af",
-                    }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    {!isMobile && "ダウンロード"}
-                  </button>
-                  <button
-                    onClick={handleCopy}
-                    disabled={!htmlOutput}
-                    style={{
-                      fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none",
-                      cursor: htmlOutput ? "pointer" : "not-allowed",
-                      display: "flex", alignItems: "center", gap: "5px", fontWeight: 600,
-                      transition: "all 0.15s",
-                      background: copied ? "#dcfce7" : htmlOutput ? "#4f6ef7" : "#f3f4f6",
-                      color: copied ? "#16a34a" : htmlOutput ? "#fff" : "#9ca3af",
-                    }}
-                  >
-                    {copied ? (
-                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>{!isMobile && "コピーしました"}</>
-                    ) : (
-                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" strokeWidth="1.5"/></svg>{!isMobile && "コピー"}</>
-                    )}
-                  </button>
-                </div>
-              </div>
-              {showPreview ? (
-                <div
-                  className="markdown-preview"
-                  style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontSize: "13px", lineHeight: "1.7", color: "#1f2937", background: "#fafafa", boxSizing: "border-box", overflowY: "auto" }}
-                  dangerouslySetInnerHTML={{ __html: htmlOutput || "<p style='color:#9ca3af'>変換結果がここに表示されます</p>" }}
-                />
-              ) : (
-                <textarea
-                  style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontFamily: "ui-monospace, monospace", fontSize: "13px", lineHeight: "1.7", color: "#1f2937", resize: "none", border: "none", outline: "none", background: "#fafafa", boxSizing: "border-box" }}
-                  readOnly
-                  value={htmlOutput}
-                  placeholder="変換結果がここに表示されます"
-                />
               )}
             </div>
           </div>
 
-          <div style={{ padding: "9px 18px", borderTop: "0.5px solid #f0f1f4", background: "#fafafa", display: "flex", alignItems: "center", gap: "6px" }}>
-            {stats ? (
-              <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#22c55e" strokeWidth="2" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: "#6b7280" }}>{stats.rows}行 × {stats.cols}列 を変換しました</span></>
+          {/* 右：出力 */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ padding: "10px 16px", borderBottom: `0.5px solid ${COLORS.borderLight}`, background: COLORS.bgOption, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontSize: "13px", fontWeight: 700, color: COLORS.textPrimary }}>HTML 出力</span>
+                <div style={{ display: "flex", background: COLORS.bg, borderRadius: "6px", padding: "2px" }}>
+                  <button onClick={() => setShowPreview(false)} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: !showPreview ? COLORS.bgCard : "transparent", color: !showPreview ? COLORS.textPrimary : COLORS.textMuted }}>テキスト</button>
+                  <button onClick={() => setShowPreview(true)} style={{ fontSize: "11px", padding: "3px 8px", borderRadius: "4px", border: "none", cursor: "pointer", fontWeight: 500, background: showPreview ? COLORS.bgCard : "transparent", color: showPreview ? COLORS.textPrimary : COLORS.textMuted }}>プレビュー</button>
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <button onClick={handleDownload} disabled={!htmlOutput} style={{ fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none", cursor: htmlOutput ? "pointer" : "not-allowed", display: "flex", alignItems: "center", gap: "5px", fontWeight: 600, background: htmlOutput ? COLORS.successBg : COLORS.bgOption, color: htmlOutput ? COLORS.successText : COLORS.textMuted }}>
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  {!isMobile && "ダウンロード"}
+                </button>
+                <button onClick={handleCopy} disabled={!htmlOutput} style={{ fontSize: "12px", padding: "4px 12px", borderRadius: "6px", border: "none", cursor: htmlOutput ? "pointer" : "not-allowed", display: "flex", alignItems: "center", gap: "5px", fontWeight: 600, background: copied ? COLORS.successBg : htmlOutput ? COLORS.accent : COLORS.bgOption, color: copied ? COLORS.successText : htmlOutput ? COLORS.bgCard : COLORS.textMuted }}>
+                  {copied ? (
+                    <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>{!isMobile && "コピーしました"}</>
+                  ) : (
+                    <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" strokeWidth="1.5"/></svg>{!isMobile && "コピー"}</>
+                  )}
+                </button>
+              </div>
+            </div>
+            {showPreview ? (
+              <div className="markdown-preview" style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontSize: "13px", lineHeight: "1.7", color: COLORS.textPrimary, background: COLORS.bgOutput, boxSizing: "border-box", overflowY: "auto" }} dangerouslySetInnerHTML={{ __html: htmlOutput || `<p style='color:${COLORS.textMuted}'>変換結果がここに表示されます</p>` }}></div>
             ) : (
-              <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v4M8 11v.01" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: "#9ca3af" }}>入力データはサーバーに送信されません。機密情報も安心してご利用いただけます。</span></>
+              <textarea style={{ width: "100%", height: isMobile ? "240px" : "320px", padding: "14px 16px", fontFamily: FONTS.mono, fontSize: "13px", lineHeight: "1.7", color: COLORS.textPrimary, resize: "none", border: "none", outline: "none", background: COLORS.bgOutput, boxSizing: "border-box" }} readOnly value={htmlOutput} placeholder="変換結果がここに表示されます" />
             )}
           </div>
         </div>
 
-        <div style={{ margin: "52px 0 28px", borderTop: "0.5px solid #e2e4e9" }} />
+        {/* ステータスバー */}
+        <div style={{ padding: "9px 18px", borderTop: `0.5px solid ${COLORS.borderLight}`, background: COLORS.bgOption, display: "flex", alignItems: "center", gap: "6px" }}>
+          {stats ? (
+            <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke={COLORS.success} strokeWidth="2" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: COLORS.textSecondary }}>{stats.rows}行 × {stats.cols}列 を変換しました</span></>
+          ) : (
+            <><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v4M8 11v.01" stroke={COLORS.textMuted} strokeWidth="1.5" strokeLinecap="round"/></svg><span style={{ fontSize: "12px", color: COLORS.textMuted }}>入力データはサーバーに送信されません。機密情報も安心してご利用いただけます。</span></>
+          )}
+        </div>
+      </ToolCard>
 
-        <section style={{ marginBottom: "36px" }}>
-          <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 16px" }}>使い方</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {[
-              "左のエリアにCSVテキストを貼り付けるか、CSVファイルをドロップまたは「ファイルを開く」で選択してください",
-              "ExcelファイルはそのままドロップまたはExcelファイルを開くで選択できます（.xlsx / .xls対応）",
-              "右側にHTMLテーブルが即時表示されます",
-              "「コピー」ボタンでHTMLをコピーするか、「ダウンロード」ボタンで.htmlファイルとして保存できます",
-              "「プレビュー」タブで実際の表の見た目を確認できます",
-              "1行目をヘッダーとして扱わない場合はトグルをオフにしてください",
-              "スタイルオプションで「シンプル」または「ストライプ」を選ぶと、CSSスタイル付きのHTMLが出力されます。WordPressやブログのHTML編集モードにそのまま貼り付けられます",
-            ].map((text, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#eef0fd", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, color: "#4f6ef7", flexShrink: 0, marginTop: "1px" }}>{i + 1}</div>
-                <span style={{ fontSize: "13px", color: "#374151", lineHeight: 1.7 }}>{text}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: "36px" }}>
-          <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 16px" }}>よくある質問</h2>
-          <div style={{ border: "0.5px solid #e2e4e9", borderRadius: "10px", overflow: "hidden" }}>
-            {[
-              { q: "ExcelファイルをそのままHTMLに変換できますか？", a: "はい。.xlsxまたは.xlsファイルをドロップするか「ファイルを開く」で選択してください。1シート目の内容が自動的に読み込まれHTMLテーブルに変換されます。" },
-              { q: "日本語を含むCSVは変換できますか？", a: "はい。全角文字・日本語を含むCSVも正確に変換できます。" },
-              { q: "機密情報を含むデータを変換しても大丈夫ですか？", a: "はい、安心してご利用いただけます。すべての変換処理はブラウザ上で完結しており、入力データおよびアップロードしたファイルが外部サーバーに送信されることは一切ありません。社内データや機密情報を含むCSVでも安全にご利用いただけます。" },
-              { q: "スタイルオプションの違いは何ですか？", a: "「なし」は素のHTMLテーブルを出力します。「シンプル」はボーダーとヘッダー背景色付きの読みやすいテーブルを出力します。「ストライプ」は青いヘッダーと縞模様のデザインで視認性の高いテーブルを出力します。いずれもCSSがHTMLに含まれているのでそのまま貼り付けて使えます。" },
-              { q: "スタイル付きHTMLをWordPressに貼り付けられますか？", a: "はい。WordPressの投稿編集画面で「カスタムHTML」ブロックを追加し、出力されたHTMLをそのまま貼り付けてください。スタイルも含まれているので見栄えの良いテーブルが表示されます。" },
-              { q: "どんな用途に使えますか？", a: "WordPressやはてなブログなどのHTML編集モード、WebサイトのHTMLファイルへの貼り付けなど、HTMLテーブルを使う場面全般で活用できます。スタイルオプションを使えばCSSの知識がなくても見栄えの良いテーブルをすぐに作れます。" },
-            ].map((item, i, arr) => (
-              <div key={i} style={{ padding: "14px 18px", borderBottom: i < arr.length - 1 ? "0.5px solid #f0f1f4" : "none", background: "#fff" }}>
-                <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1d23", margin: "0 0 5px" }}>{item.q}</p>
-                <p style={{ fontSize: "13px", color: "#6b7280", margin: 0, lineHeight: 1.7 }}>{item.a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ツールリンク */}
-        <section style={{ marginBottom: "36px" }}>
-          <ToolLinks current="/csv-to-html" />
-        </section>
-
-        <section>
-          <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#1a1d23", margin: "0 0 12px" }}>このツールについて</h2>
-          <p style={{ fontSize: "13px", color: "#6b7280", lineHeight: 1.8, margin: 0 }}>
-            CSV→HTMLテーブル変換ツールは、CSVやExcelデータをHTMLテーブルに即時変換する無料のオンラインツールです。シンプル・ストライプのスタイルオプションを選ぶことで、CSSの知識がなくても見栄えの良いHTMLテーブルをワンクリックで生成できます。WordPressやはてなブログのHTML編集モード、WebサイトへのHTMLテーブル埋め込みなど幅広い用途に活用できます。登録不要・完全無料でご利用いただけます。
-          </p>
-        </section>
-
-      </main>
-
-      {/* フッター */}
-      <Footer />
-
-    </div>
+      <ToolDivider />
+      <StepList steps={STEPS} />
+      <FaqList items={FAQ} />
+      <ToolGuide title={GUIDE.title} items={GUIDE.items} />
+      <section style={{ marginBottom: "36px" }}>
+        <ToolLinks current="/csv-to-html" />
+      </section>
+      <ToolAbout>
+        CSVやExcelのデータをHTMLテーブルに変換するブラウザ完結ツールです。WordPressやはてなブログのHTML編集モード、WebサイトへのHTMLテーブル埋め込みなど幅広い用途に活用できます。
+      </ToolAbout>
+    </ToolPageLayout>
   );
 }
