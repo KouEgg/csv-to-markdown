@@ -49,7 +49,7 @@ export default function RootLayout({ children }) {
     >
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+JP:wght@400;500&display=swap"
           rel="stylesheet"
         />
         <script

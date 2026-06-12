@@ -32,6 +32,15 @@ export default function Header() {
         }}>
           Tools
         </Link>
+        <Link href="/blog" style={{
+          fontSize: "12px",
+          color: COLORS.textPrimary,
+          textDecoration: "none",
+          letterSpacing: "0.04em",
+          opacity: 0.5,
+        }}>
+          Blog
+        </Link>
         <Link href="/about" style={{
           fontSize: "12px",
           color: COLORS.textPrimary,
